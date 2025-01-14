@@ -2,7 +2,7 @@
 
 /// My first Rust program that display a personalized greeting
 fn main() {
-    let repetition = 5;
+    let repetition = 4;
     println!("{}", greetings(repetition));
 }
 
@@ -16,4 +16,19 @@ fn greetings(rep: usize) -> String {
     greet.push_str(" world!");
     greet
 }
+
+
+
+#[cfg(test)]
+mod tests {
+    use crate::greetings;
+
+    #[test]
+    fn greetings_works() {
+        let g = greetings(4);
+        assert_eq!(g, "Hellooooo world!");
+    }
+}
+
+
 
