@@ -4,6 +4,10 @@
 fn main() {
     let repetition = 4;
     println!("{}", greetings(repetition));
+
+
+    let a = [42;100];
+    println!("a : {:?}", a);
 }
 
 /// My first function, returns a friendly greeting
@@ -19,6 +23,7 @@ fn greetings(rep: usize) -> String {
 
 
 
+
 #[cfg(test)]
 mod tests {
     use crate::greetings;
@@ -28,6 +33,7 @@ mod tests {
         let g = greetings(4);
         assert_eq!(g, "Hellooooo world!");
     }
+
 }
 
 
