@@ -1,38 +1,43 @@
 
 
-/// My first Rust program that display a personalized greeting
 fn main() {
-    let repetition = 4;
-    println!("{}", greetings(repetition));
+/*    let mut v = Vec::new();
+    v.push(12);
+
+    let v1 = vec![12;100];
+    println!("v1 : {:?}", v1);
+
+    let v2 = vec![12,100];
+    println!("v2 : {:?}", v2);*/
 
 
-    let a = [42;100];
-    println!("a : {:?}", a);
+
+    let mut v = Vec::new();
+    v.push(12);
+    println!("first element of v : {}", v[0]);
+
+    v.extend(1..20);
+    println!("first element of v : {}", v[0]);
+    println!("Some elements of v : {:?}", &v[2..7]);
+    println!("Some other elements of v : {:?}", &v[5..=10]);
+    println!("Yet other elements of v : {:?}", &v[..4]);
+    println!("Yet again other elements of v : {:?}", &v[16..]);
+
+    for e in v.iter_mut() {
+        *e += 100;
+    }
+    println!("v after modification : {:?}", v);
+
 }
 
-/// My first function, returns a friendly greeting
-/// # Arguments
-/// * `rep` - The number of 'o' to add to the greeting
-///
-fn greetings(rep: usize) -> String {
-    let mut greet = String::from("Hello");
-    greet.push_str("o".repeat(rep).as_str());
-    greet.push_str(" world!");
-    greet
-}
+
 
 
 
 
 #[cfg(test)]
 mod tests {
-    use crate::greetings;
 
-    #[test]
-    fn greetings_works() {
-        let g = greetings(4);
-        assert_eq!(g, "Hellooooo world!");
-    }
 
 }
 
