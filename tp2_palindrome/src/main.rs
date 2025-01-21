@@ -1,10 +1,10 @@
 fn main() {
-    fn is_palindrome(chaine: &str) -> bool {
-        true
-    }
+
 }
 
-
+fn is_palindrome(chaine: &str) -> bool {
+    true
+}
 
 #[cfg(test)]
 mod tests {
