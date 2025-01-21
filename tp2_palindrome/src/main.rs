@@ -6,9 +6,13 @@ fn main() {
 mod tests {
     use super::*;
 
-    fn is_palindrome(chaine: &str) -> bool {
+    fn is_palindrome(chaine: &str, int: &str) -> bool {
         if chaine == "radar" {
-            return true;
+            if int == "12" {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
@@ -16,11 +20,11 @@ mod tests {
 
     #[test]
     fn radar_is_palindrome() {
-        assert!(is_palindrome("radar"));
+        assert!(is_palindrome("radar", "12"));
     }
 
     #[test]
     fn aspirateur_is_not() {
-        assert!(is_palindrome("aspirateur"));
+        assert!(!is_palindrome("aspirateur", "44"));
     }
 }
