@@ -1,5 +1,7 @@
 fn main() {
-
+    fn is_palindrome(chaine: &str) -> bool {
+        true
+    }
 }
 
 
