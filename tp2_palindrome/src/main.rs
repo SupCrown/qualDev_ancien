@@ -1,30 +1,34 @@
 fn main() {
     println!("Hello, world!");
+    let tableau = [
+        "gateau";
+        "palindrôme";
+        "bonjour";
+        "palindrome";
+        "palïndrome";
+    ];
+}
+
+fn hv_accent(chaine: []) -> bool {
+    for mot in chaine{
+        if 
+    }
+
+}
+
+fn is_palindrome(chaine: []) -> bool {
+    
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    fn is_palindrome(chaine: &str, int: &str) -> bool {
-        if chaine == "radar" {
-            if int == "12" {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+    fn vide_is_not() {
+        assert!(!is_palindrome(""))
     }
 
-    #[test]
-    fn radar_is_palindrome() {
-        assert!(is_palindrome("radar", "12"));
-    }
-
-    #[test]
-    fn aspirateur_is_not() {
-        assert!(!is_palindrome("aspirateur", "44"));
+    fn liste_is_palindrome() {
+        assert!(!is_palindrome(tableau));
     }
 }
