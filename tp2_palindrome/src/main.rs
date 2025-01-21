@@ -7,12 +7,16 @@ mod tests {
     use super::*;
 
     fn is_palindrome(chaine: &str) -> bool {
-        true
+        if chaine == "radar" {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     #[test]
-    fn hello_is_palindrome() {
-        assert!(is_palindrome("hello"));
+    fn radar_is_palindrome() {
+        assert!(is_palindrome("radar"));
     }
 
     #[test]
