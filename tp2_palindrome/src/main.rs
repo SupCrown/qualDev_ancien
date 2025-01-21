@@ -14,4 +14,9 @@ mod tests {
     fn hello_is_palindrome() {
         assert!(is_palindrome("hello"));
     }
+
+    #[test]
+    fn aspirateur_is_not() {
+        assert!(!is_palindrome("aspirateur"));
+    }
 }
