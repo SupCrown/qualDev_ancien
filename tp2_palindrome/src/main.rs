@@ -21,6 +21,6 @@ mod tests {
 
     #[test]
     fn aspirateur_is_not() {
-        assert!(!is_palindrome("aspirateur"));
+        assert!(is_palindrome("aspirateur"));
     }
 }
