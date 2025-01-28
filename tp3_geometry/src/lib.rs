@@ -70,4 +70,11 @@ mod tests {
 
     }
 
+    fn point_is_origin() {
+        let point1 = Point::null();
+        assert_eq!(point1.x,0.0);
+        assert_eq!(point1.y,0.0);
+
+    }
+
 }
