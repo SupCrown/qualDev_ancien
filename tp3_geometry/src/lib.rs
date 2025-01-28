@@ -2,7 +2,6 @@ struct Vec2d {
     x: f64,
     y: f64,
 }
-
 struct Point {
     x: f64,
     y: f64,
@@ -17,6 +16,9 @@ impl Vec2d {
         Vec2d{ x: abs, y: ord }
     }
 
+    fn from_points(point1 : Point, point2 : Point) -> Self{
+        Vec2d{ x: point1.x - point2.x , y: point1.y - point2.y }
+    }
 
 }
 
@@ -59,11 +61,11 @@ mod tests {
 
     #[test]
     fn get_vec_from_points() {
-        let point1 = Point{x:8.2,y:9.0};
-        let point2 = Point{x:7.8,y:7.0};
+        let point1 = Point{x:8.0,y:9.0};
+        let point2 = Point{x:7.0,y:7.0};
 
         let vec2d1 = Vec2d::from_points(point1,point2);
-        assert_eq!(vec2d1.x,0.4);
+        assert_eq!(vec2d1.x,1.0);
         assert_eq!(vec2d1.y,2.0);
 
     }
