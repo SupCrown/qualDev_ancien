@@ -10,6 +10,9 @@ impl Vec2D {
     pub fn new(x: f64, y: f64) -> Self {
         Vec2D { x, y }
     }
+    pub fn null(x: f64, y: f64) -> Self {
+        Vec2D { x, y }
+    }
 }
 
 #[cfg(test)]
@@ -25,8 +28,17 @@ mod tests {
 
     #[test]
     fn create_vecteur_null() {
-        let vecteur = Vec2D::new(0.0, 0.0);
+        let vecteur = Vec2D::null(0.0, 0.0);
         assert_eq!(vecteur.x, 0.0);
         assert_eq!(vecteur.y, 0.0);
+    }
+
+    #[test]
+    fn create_vecteur_new() {
+        let f1 = 12.5;
+        let f2 = 23.1;
+        let vecteur = Vec2D::new(f1, f2);
+        assert_eq!(vecteur.x, f1);
+        assert_eq!(vecteur.y, f2);
     }
 }
