@@ -3,6 +3,11 @@ struct Vec2d {
     y: f64,
 }
 
+struct Point {
+    x: f64,
+    y: f64,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
