@@ -8,7 +8,11 @@ struct Point {
     y: f64,
 }
 
-
+impl Vec2d {
+    fn vec_null() -> Self{
+        Vec2d{ x: 0.0, y: 0.0 }
+    }
+}
 
 #[cfg(test)]
 mod tests {
