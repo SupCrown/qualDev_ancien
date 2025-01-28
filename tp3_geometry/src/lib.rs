@@ -11,6 +11,9 @@ impl Point{
     fn null() -> Self{
         Point{ x: 0.0, y: 0.0 }
     }
+    fn new(abs : f64, ord : f64) -> Self{
+        Point{ x: abs, y: ord }
+    }
 }
 
 impl Vec2d {
