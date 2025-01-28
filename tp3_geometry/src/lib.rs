@@ -82,5 +82,11 @@ mod tests {
         assert_eq!(point1.y,0.0);
 
     }
+    #[test]
+    fn create_new_point() {
+        let point1 = Point::null();
+        assert_eq!(point1.x,0.0);
+        assert_eq!(point1.y,0.0);
 
+    }
 }
