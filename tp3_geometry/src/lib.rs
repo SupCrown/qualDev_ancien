@@ -57,5 +57,15 @@ mod tests {
 
     }
 
+    #[test]
+    fn get_vec_from_points() {
+        let point1 = Point{x:8.2,y:9.0};
+        let point2 = Point{x:7.8,y:7.0};
+
+        let vec2d1 = Vec2d::from_points(point1,point2);
+        assert_eq!(vec2d1.x,0.4);
+        assert_eq!(vec2d1.y,2.0);
+
+    }
 
 }
