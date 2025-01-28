@@ -92,4 +92,15 @@ mod tests {
         assert_eq!(point1.y,0.0);
 
     }
+
+    #[test]
+    fn add_vec() {
+        let vec1 = Point{x:8.0,y:9.0};
+        let vec2 = Point{x:7.0,y:7.0};
+
+        let vec2d1 = Vec2d::add(vec1,vec2);
+        assert_eq!(vec2d1.x,15.0);
+        assert_eq!(vec2d1.y,14.0);
+
+    }
 }
