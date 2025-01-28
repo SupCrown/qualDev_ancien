@@ -7,6 +7,12 @@ struct Point {
     y: f64,
 }
 
+impl Point{
+    fn null() -> Self{
+        Point{ x: 0.0, y: 0.0 }
+    }
+}
+
 impl Vec2d {
     fn null() -> Self{
         Vec2d{ x: 0.0, y: 0.0 }
@@ -69,7 +75,7 @@ mod tests {
         assert_eq!(vec2d1.y,2.0);
 
     }
-
+    #[test]
     fn point_is_origin() {
         let point1 = Point::null();
         assert_eq!(point1.x,0.0);
