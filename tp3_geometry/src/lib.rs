@@ -19,7 +19,7 @@ mod tests {
 
         };
     }
-
+    #[test]
     fn create_point() {
         let vec2d1 = Vec2d{
             x : 1.0,
