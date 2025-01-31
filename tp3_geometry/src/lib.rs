@@ -1,3 +1,4 @@
+use std::f64::consts::PI;
 #[derive(Clone, Copy, Debug)]
 struct Vec2D {
     x: f64,
@@ -64,6 +65,13 @@ impl Vec2D {
                 x: self.x / norm,
                 y: self.y / norm,
             }
+        }
+    }
+    pub fn rotate(self, angle: f64) -> Self {
+        let rad = angle * PI / 180.0;
+        Self {
+            x: self.x * rad.cos() - self.y * rad.sin(),
+            y: self.x * rad.sin() + self.y * rad.cos(),
         }
     }
 }
@@ -152,5 +160,13 @@ mod tests {
         let result = point.translate(vec);
         assert_eq!(result.x, 4.0);
         assert_eq!(result.y, 6.0);
+    }
+
+
+    #[test]
+    fn vec2d_rotate() {
+        let vec = Vec2D::new(1.0, 0.0).rotate(90.0);
+        assert!((vec.x - 0.0).abs() < 1e-6);
+        assert!((vec.y - 1.0).abs() < 1e-6);
     }
 }
