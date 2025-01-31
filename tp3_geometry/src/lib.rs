@@ -195,4 +195,12 @@ mod tests {
         let vec2 = Vec2D::new(3.0, 4.0);
         assert_eq!(vec1.dot(vec2), 11.0);
     }
+
+
+    #[test]
+    fn vec2d_colinear() {
+        let vec1 = Vec2D::new(2.0, 4.0);
+        let vec2 = Vec2D::new(1.0, 2.0);
+        assert!(vec1.colinear(vec2));
+    }
 }
