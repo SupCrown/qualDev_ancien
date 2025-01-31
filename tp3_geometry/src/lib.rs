@@ -169,4 +169,11 @@ mod tests {
         assert!((vec.x - 0.0).abs() < 1e-6);
         assert!((vec.y - 1.0).abs() < 1e-6);
     }
+
+    #[test]
+    fn vec2d_angle() {
+        let vec1 = Vec2D::new(1.0, 0.0);
+        let vec2 = Vec2D::new(0.0, 1.0);
+        assert!((vec1.angle(vec2) - 90.0).abs() < 1e-6);
+    }
 }
