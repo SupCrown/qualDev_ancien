@@ -1,100 +1,21 @@
+pub mod objects;
+
+use crate::objects::point::Point;
+use crate::objects::vec2d::Vec2D;
 use std::f64::consts::PI;
-#[derive(Clone, Copy, Debug)]
-struct Vec2D {
-    x: f64,
-    y: f64,
-}
-#[derive(Clone, Copy, Debug)]
-struct Point {
-    x: f64,
-    y: f64,
+
+fn main() {
+    let mut p = Point::origin();
+    let v = Vec2D::new(12.3, 45.6);
+
+    let transformed_v = v.scale(3.0).rotate(PI).add(Vec2D::new(1.0, 1.0));
+    p.translate(transformed_v);
 }
 
-impl Point {
-    fn null() -> Self {
-        Point { x: 0.0, y: 0.0 }
-    }
-    fn new(abs: f64, ord: f64) -> Self {
-        Point { x: abs, y: ord }
-    }
-
-    fn translate(self, vec2d: Vec2D) -> Self {
-        Self {x :self.x + vec2d.x,
-            y: self.y + vec2d.y}
-    }
-}
-
-impl Vec2D {
-    fn null() -> Self {
-        Vec2D { x: 0.0, y: 0.0 }
-    }
-
-    fn new(abs: f64, ord: f64) -> Self {
-        Vec2D { x: abs, y: ord }
-    }
-
-    fn from_points(point1: Point, point2: Point) -> Self {
-        Vec2D {
-            x: point1.x - point2.x,
-            y: point1.y - point2.y,
-        }
-    }
-
-    fn add(self, other: Self) -> Self {
-        Self {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
-    }
-
-    fn norm(self) -> f64 {
-        (self.x.powi(2) + self.y.powi(2)).sqrt()
-    }
-    fn scale(self, factor: f64) -> Self {
-        Self {
-            x: self.x * factor,
-            y: self.y * factor,
-        }
-    }
-    fn normalize(self) -> Self {
-        let norm = self.norm();
-        if norm == 0.0 {
-            Self::null()
-        } else {
-            Self {
-                x: self.x / norm,
-                y: self.y / norm,
-            }
-        }
-    }
-    fn rotate(self, angle: f64) -> Self {
-        let rad = angle * PI / 180.0;
-        Self {
-            x: self.x * rad.cos() - self.y * rad.sin(),
-            y: self.x * rad.sin() + self.y * rad.cos(),
-        }
-    }
-    fn angle(self, other: Self) -> f64 {
-        let dot_product = self.dot(other);
-        let norms = self.norm() * other.norm();
-        if norms == 0.0 {
-            0.0
-        } else {
-            (dot_product / norms).acos() * 180.0 / PI
-        }
-    }
-    fn dot(self, other: Self) -> f64 {
-        self.x * other.x + self.y * other.y
-    }
-    pub fn colinear(self, other: Self) -> bool {
-        self.x * other.y == self.y * other.x
-    }
-}
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::ptr::null;
     #[test]
     fn create_vec2d() {
         let vec2d1 = Vec2D { x: 1.0, y: 16.0 };
@@ -129,13 +50,13 @@ mod tests {
     }
     #[test]
     fn point_is_origin() {
-        let point1 = Point::null();
+        let point1 = Point::origin();
         assert_eq!(point1.x, 0.0);
         assert_eq!(point1.y, 0.0);
     }
     #[test]
     fn create_new_point() {
-        let point1 = Point::null();
+        let point1 = Point::origin();
         assert_eq!(point1.x, 0.0);
         assert_eq!(point1.y, 0.0);
     }
@@ -205,5 +126,20 @@ mod tests {
         let vec1 = Vec2D::new(2.0, 4.0);
         let vec2 = Vec2D::new(1.0, 2.0);
         assert!(vec1.colinear(vec2));
+    }
+
+    #[test]
+    fn vec2d_translate_by_null() {
+        let point = Point::new(3.0, 4.0);
+        let result = point.translate(Vec2D::null());
+        assert_eq!(result.x, 3.0 );
+        assert_eq!(result.y, 4.0 );
+    }
+
+    #[test]
+    fn vec2d_rotate_360() {
+        let vec = Vec2D::new(1.0, 0.0).rotate(360.0);
+        assert!((vec.x - 1.0).abs() < 1e-6);
+        assert!((vec.y - 0.0).abs() < 1e-6);
     }
 }

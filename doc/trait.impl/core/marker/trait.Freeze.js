@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"tp3_geometry":[["impl Freeze for <a class=\"struct\" href=\"tp3_geometry/objects/point/struct.Point.html\" title=\"struct tp3_geometry::objects::point::Point\">Point</a>",1,["tp3_geometry::objects::point::Point"]],["impl Freeze for <a class=\"struct\" href=\"tp3_geometry/objects/vec2d/struct.Vec2D.html\" title=\"struct tp3_geometry::objects::vec2d::Vec2D\">Vec2D</a>",1,["tp3_geometry::objects::vec2d::Vec2D"]]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
