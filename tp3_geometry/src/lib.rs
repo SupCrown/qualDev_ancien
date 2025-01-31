@@ -1,54 +1,61 @@
-
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 struct Vec2D {
     x: f64,
     y: f64,
 }
+#[derive(Clone, Copy, Debug)]
 struct Point {
     x: f64,
     y: f64,
 }
 
-impl Point{
-    fn null() -> Self{
-        Point{ x: 0.0, y: 0.0 }
+impl Point {
+    fn null() -> Self {
+        Point { x: 0.0, y: 0.0 }
     }
-    fn new(abs : f64, ord : f64) -> Self{
-        Point{ x: abs, y: ord }
+    fn new(abs: f64, ord: f64) -> Self {
+        Point { x: abs, y: ord }
+    }
+
+    fn translate(self, vec2d: Vec2D) -> Self {
+        Self {x :self.x + vec2d.x,
+            y: self.y + vec2d.y}
     }
 }
 
 impl Vec2D {
-    fn null() -> Self{
+    fn null() -> Self {
         Vec2D { x: 0.0, y: 0.0 }
     }
 
-    fn new(abs : f64, ord : f64) -> Self{
+    fn new(abs: f64, ord: f64) -> Self {
         Vec2D { x: abs, y: ord }
     }
 
-    fn from_points(point1 : Point, point2 : Point) -> Self{
-        Vec2D { x: point1.x - point2.x , y: point1.y - point2.y }
+    fn from_points(point1: Point, point2: Point) -> Self {
+        Vec2D {
+            x: point1.x - point2.x,
+            y: point1.y - point2.y,
+        }
     }
 
-    pub fn add(self, other: Self) -> Self {
+    fn add(self, other: Self) -> Self {
         Self {
             x: self.x + other.x,
             y: self.y + other.y,
         }
     }
 
-
-    pub fn norm(self) -> f64 {
+    fn norm(self) -> f64 {
         (self.x.powi(2) + self.y.powi(2)).sqrt()
     }
-    pub fn scale(self, factor: f64) -> Self {
+    fn scale(self, factor: f64) -> Self {
         Self {
             x: self.x * factor,
             y: self.y * factor,
         }
     }
-    pub fn normalize(self) -> Self {
+    fn normalize(self) -> Self {
         let norm = self.norm();
         if norm == 0.0 {
             Self::null()
@@ -59,69 +66,55 @@ impl Vec2D {
             }
         }
     }
-
 }
 
 #[cfg(test)]
 mod tests {
-    use std::ptr::null;
     use super::*;
+    use std::ptr::null;
     #[test]
     fn create_vec2d() {
-        let vec2d1 = Vec2D {
-            x : 1.0,
-            y : 16.0,
-
-        };
+        let vec2d1 = Vec2D { x: 1.0, y: 16.0 };
     }
     #[test]
     fn create_point() {
-        let vec2d1 = Vec2D {
-            x : 1.0,
-            y : 16.0,
-
-        };
+        let vec2d1 = Vec2D { x: 1.0, y: 16.0 };
     }
 
     #[test]
     fn vec2d_is_null() {
         let vec2d1 = Vec2D::null();
-        assert_eq!(vec2d1.x,0.0);
-        assert_eq!(vec2d1.y,0.0);
-
+        assert_eq!(vec2d1.x, 0.0);
+        assert_eq!(vec2d1.y, 0.0);
     }
 
     #[test]
     fn create_vec2d_param() {
         let vec2d1 = Vec2D::new(65.1, 9.0);
-        assert_eq!(vec2d1.x,65.1);
-        assert_eq!(vec2d1.y,9.0);
-
+        assert_eq!(vec2d1.x, 65.1);
+        assert_eq!(vec2d1.y, 9.0);
     }
 
     #[test]
     fn get_vec_from_points() {
-        let point1 = Point{x:8.0,y:9.0};
-        let point2 = Point{x:7.0,y:7.0};
+        let point1 = Point { x: 8.0, y: 9.0 };
+        let point2 = Point { x: 7.0, y: 7.0 };
 
         let vec2d1 = Vec2D::from_points(point1, point2);
-        assert_eq!(vec2d1.x,1.0);
-        assert_eq!(vec2d1.y,2.0);
-
+        assert_eq!(vec2d1.x, 1.0);
+        assert_eq!(vec2d1.y, 2.0);
     }
     #[test]
     fn point_is_origin() {
         let point1 = Point::null();
-        assert_eq!(point1.x,0.0);
-        assert_eq!(point1.y,0.0);
-
+        assert_eq!(point1.x, 0.0);
+        assert_eq!(point1.y, 0.0);
     }
     #[test]
     fn create_new_point() {
         let point1 = Point::null();
-        assert_eq!(point1.x,0.0);
-        assert_eq!(point1.y,0.0);
-
+        assert_eq!(point1.x, 0.0);
+        assert_eq!(point1.y, 0.0);
     }
 
     #[test]
@@ -155,9 +148,9 @@ mod tests {
     #[test]
     fn vec2d_translate() {
         let vec = Vec2D::new(3.0, 4.0);
-        let point = (1.0, 2.0);
-        let result = vec.translate(point);
-        assert_eq!(result, (4.0, 6.0));
+        let point = Point { x: 1.0, y: 2.0 };
+        let result = point.translate(vec);
+        assert_eq!(result.x, 4.0);
+        assert_eq!(result.y, 6.0);
     }
-
 }
