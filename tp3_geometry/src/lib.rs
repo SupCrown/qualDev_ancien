@@ -83,6 +83,9 @@ impl Vec2D {
             (dot_product / norms).acos() * 180.0 / PI
         }
     }
+    pub fn dot(self, other: Self) -> f64 {
+        self.x * other.x + self.y * other.y
+    }
 }
 
 #[cfg(test)]
