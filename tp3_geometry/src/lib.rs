@@ -1,4 +1,4 @@
-struct Vec2d {
+struct Vect2D {
     x: f64,
     y: f64,
 }
@@ -16,20 +16,25 @@ impl Point{
     }
 }
 
-impl Vec2d {
+impl Vect2D {
     fn null() -> Self{
-        Vec2d{ x: 0.0, y: 0.0 }
+        Vect2D { x: 0.0, y: 0.0 }
     }
 
     fn new(abs : f64, ord : f64) -> Self{
-        Vec2d{ x: abs, y: ord }
+        Vect2D { x: abs, y: ord }
     }
 
     fn from_points(point1 : Point, point2 : Point) -> Self{
-        Vec2d{ x: point1.x - point2.x , y: point1.y - point2.y }
+        Vect2D { x: point1.x - point2.x , y: point1.y - point2.y }
     }
 
-
+    pub fn add(self, other: Self) -> Self {
+        Self {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
 
 
 }
@@ -40,7 +45,7 @@ mod tests {
     use super::*;
     #[test]
     fn create_vec2d() {
-        let vec2d1 = Vec2d{
+        let vec2d1 = Vect2D {
             x : 1.0,
             y : 16.0,
 
@@ -48,7 +53,7 @@ mod tests {
     }
     #[test]
     fn create_point() {
-        let vec2d1 = Vec2d{
+        let vec2d1 = Vect2D {
             x : 1.0,
             y : 16.0,
 
@@ -57,7 +62,7 @@ mod tests {
 
     #[test]
     fn vec2d_is_null() {
-        let vec2d1 = Vec2d::null();
+        let vec2d1 = Vect2D::null();
         assert_eq!(vec2d1.x,0.0);
         assert_eq!(vec2d1.y,0.0);
 
@@ -65,7 +70,7 @@ mod tests {
 
     #[test]
     fn create_vec2d_param() {
-        let vec2d1 = Vec2d::new(65.1,9.0);
+        let vec2d1 = Vect2D::new(65.1, 9.0);
         assert_eq!(vec2d1.x,65.1);
         assert_eq!(vec2d1.y,9.0);
 
@@ -76,7 +81,7 @@ mod tests {
         let point1 = Point{x:8.0,y:9.0};
         let point2 = Point{x:7.0,y:7.0};
 
-        let vec2d1 = Vec2d::from_points(point1,point2);
+        let vec2d1 = Vect2D::from_points(point1, point2);
         assert_eq!(vec2d1.x,1.0);
         assert_eq!(vec2d1.y,2.0);
 
@@ -98,10 +103,16 @@ mod tests {
 
     #[test]
     fn add_vec() {
-        let vec1 = Vec2d::new(8.0, 9.0);
-        let vec2 = Vec2d::new(7.0, 7.0);
+        let vec1 = Vect2D::new(8.0, 9.0);
+        let vec2 = Vect2D::new(7.0, 7.0);
         let result = vec1.add(vec2);
         assert_eq!(result.x, 15.0);
         assert_eq!(result.y, 16.0);
+    }
+
+    #[test]
+    fn vec2d_norm() {
+        let vec = Vec2D::new(3.0, 4.0);
+        assert_eq!(vec.norm(), 5.0);
     }
 }
