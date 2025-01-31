@@ -29,6 +29,9 @@ impl Vec2d {
         Vec2d{ x: point1.x - point2.x , y: point1.y - point2.y }
     }
 
+
+
+
 }
 
 #[cfg(test)]
@@ -95,12 +98,10 @@ mod tests {
 
     #[test]
     fn add_vec() {
-        let vec1 = Point{x:8.0,y:9.0};
-        let vec2 = Point{x:7.0,y:7.0};
-
-        let vec2d1 = Vec2d::add(vec1,vec2);
-        assert_eq!(vec2d1.x,15.0);
-        assert_eq!(vec2d1.y,14.0);
-
+        let vec1 = Vec2d::new(8.0, 9.0);
+        let vec2 = Vec2d::new(7.0, 7.0);
+        let result = vec1.add(vec2);
+        assert_eq!(result.x, 15.0);
+        assert_eq!(result.y, 16.0);
     }
 }
