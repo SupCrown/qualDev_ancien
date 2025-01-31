@@ -120,4 +120,11 @@ mod tests {
         let vec = Vec2D::new(3.0, 4.0);
         assert_eq!(vec.norm(), 5.0);
     }
+
+    #[test]
+    fn vec2d_scale() {
+        let vec = Vec2D::new(2.0, 3.0).scale(2.0);
+        assert_eq!(vec.x, 4.0);
+        assert_eq!(vec.y, 6.0);
+    }
 }
