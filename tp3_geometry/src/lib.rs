@@ -40,7 +40,12 @@ impl Vec2D {
     pub fn norm(self) -> f64 {
         (self.x.powi(2) + self.y.powi(2)).sqrt()
     }
-
+    pub fn scale(self, factor: f64) -> Self {
+        Self {
+            x: self.x * factor,
+            y: self.y * factor,
+        }
+    }
 
 }
 
@@ -127,4 +132,6 @@ mod tests {
         assert_eq!(vec.x, 4.0);
         assert_eq!(vec.y, 6.0);
     }
+
+
 }
