@@ -133,5 +133,12 @@ mod tests {
         assert_eq!(vec.y, 6.0);
     }
 
+    #[test]
+    fn vec2d_normalize() {
+        let vec = Vec2D::new(3.0, 4.0).normalize();
+        assert!((vec.x - 0.6).abs() < 1e-6);
+        assert!((vec.y - 0.8).abs() < 1e-6);
+    }
+
 
 }
