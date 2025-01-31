@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"tp3_geometry":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.75.0/core/fmt/trait.Debug.html\" title=\"trait core::fmt::Debug\">Debug</a> for <a class=\"struct\" href=\"tp3_geometry/objects/point/struct.Point.html\" title=\"struct tp3_geometry::objects::point::Point\">Point</a>"],["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.75.0/core/fmt/trait.Debug.html\" title=\"trait core::fmt::Debug\">Debug</a> for <a class=\"struct\" href=\"tp3_geometry/objects/vec2d/struct.Vec2D.html\" title=\"struct tp3_geometry::objects::vec2d::Vec2D\">Vec2D</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
