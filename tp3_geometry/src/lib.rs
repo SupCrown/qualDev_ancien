@@ -67,14 +67,14 @@ impl Vec2D {
             }
         }
     }
-    pub fn rotate(self, angle: f64) -> Self {
+    fn rotate(self, angle: f64) -> Self {
         let rad = angle * PI / 180.0;
         Self {
             x: self.x * rad.cos() - self.y * rad.sin(),
             y: self.x * rad.sin() + self.y * rad.cos(),
         }
     }
-    pub fn angle(self, other: Self) -> f64 {
+    fn angle(self, other: Self) -> f64 {
         let dot_product = self.dot(other);
         let norms = self.norm() * other.norm();
         if norms == 0.0 {
@@ -83,8 +83,11 @@ impl Vec2D {
             (dot_product / norms).acos() * 180.0 / PI
         }
     }
-    pub fn dot(self, other: Self) -> f64 {
+    fn dot(self, other: Self) -> f64 {
         self.x * other.x + self.y * other.y
+    }
+    pub fn colinear(self, other: Self) -> bool {
+        self.x * other.y == self.y * other.x
     }
 }
 
