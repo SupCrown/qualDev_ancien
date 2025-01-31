@@ -1,3 +1,5 @@
+
+#[derive(Clone, Copy)]
 struct Vec2D {
     x: f64,
     y: f64,
@@ -44,6 +46,17 @@ impl Vec2D {
         Self {
             x: self.x * factor,
             y: self.y * factor,
+        }
+    }
+    pub fn normalize(self) -> Self {
+        let norm = self.norm();
+        if norm == 0.0 {
+            Self::null()
+        } else {
+            Self {
+                x: self.x / norm,
+                y: self.y / norm,
+            }
         }
     }
 
