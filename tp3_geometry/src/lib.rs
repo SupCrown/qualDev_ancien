@@ -152,6 +152,12 @@ mod tests {
         assert!((vec.x - 0.6).abs() < 1e-6);
         assert!((vec.y - 0.8).abs() < 1e-6);
     }
-
+    #[test]
+    fn vec2d_translate() {
+        let vec = Vec2D::new(3.0, 4.0);
+        let point = (1.0, 2.0);
+        let result = vec.translate(point);
+        assert_eq!(result, (4.0, 6.0));
+    }
 
 }
