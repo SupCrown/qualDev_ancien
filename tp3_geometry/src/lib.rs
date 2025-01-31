@@ -74,6 +74,15 @@ impl Vec2D {
             y: self.x * rad.sin() + self.y * rad.cos(),
         }
     }
+    pub fn angle(self, other: Self) -> f64 {
+        let dot_product = self.dot(other);
+        let norms = self.norm() * other.norm();
+        if norms == 0.0 {
+            0.0
+        } else {
+            (dot_product / norms).acos() * 180.0 / PI
+        }
+    }
 }
 
 #[cfg(test)]
@@ -175,5 +184,12 @@ mod tests {
         let vec1 = Vec2D::new(1.0, 0.0);
         let vec2 = Vec2D::new(0.0, 1.0);
         assert!((vec1.angle(vec2) - 90.0).abs() < 1e-6);
+    }
+
+    #[test]
+    fn vec2d_dot() {
+        let vec1 = Vec2D::new(1.0, 2.0);
+        let vec2 = Vec2D::new(3.0, 4.0);
+        assert_eq!(vec1.dot(vec2), 11.0);
     }
 }
