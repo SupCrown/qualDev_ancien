@@ -14,6 +14,9 @@ impl Point{
     fn new(abs : f64, ord : f64) -> Self{
         Point{ x: abs, y: ord }
     }
+    fn from_points(vec1 : Point, vec2 : Point) -> Self{
+        Point{ x: vec1.x - vec2.x , y: vec1.y - vec2.y }
+    }
 }
 
 impl Vec2d {
