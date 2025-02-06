@@ -1,10 +1,8 @@
 use egui::{Sense, Vec2};
 use rand::Rng;
+use crate::SocialSimulation;
 
-
-
-
-impl eframe::App for SocialSimulationApp {
+impl eframe::App for SocialSimulation {
     /// Called each time the UI needs repainting, which may be many times per second.
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
 

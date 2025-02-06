@@ -1,5 +1,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")] // hide console window on Windows in release
 
+use social_simulation;
 // When compiling natively:
 #[cfg(not(target_arch = "wasm32"))]
 fn main() -> eframe::Result {
@@ -36,7 +37,7 @@ fn main() {
             .start(
                 "the_canvas_id",
                 web_options,
-                Box::new(|cc| Ok(Box::new(social_simulation::SocialSimulation::new(cc)))),
+                Box::new(|cc| Ok(Box::new(social_simulation::social_simulation::new(cc)))),
             )
             .await;
 
