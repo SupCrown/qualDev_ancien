@@ -19,7 +19,7 @@ fn main() -> eframe::Result {
     eframe::run_native(
         "Social Simulation",
         native_options,
-        Box::new(|cc| Ok(Box::new(social_simulation::SocialSimulationApp::new(cc)))),
+        Box::new(|cc| Ok(Box::new(social_simulation::SocialSimulation::new(cc)))),
     )
 }
 
@@ -36,7 +36,7 @@ fn main() {
             .start(
                 "the_canvas_id",
                 web_options,
-                Box::new(|cc| Ok(Box::new(social_simulation::SocialSimulationApp::new(cc)))),
+                Box::new(|cc| Ok(Box::new(social_simulation::SocialSimulation::new(cc)))),
             )
             .await;
 

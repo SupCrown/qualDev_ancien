@@ -8,9 +8,9 @@ Vous répondrez aux questions suivantes à propos de la preuve de concept fourni
 Vous ajouterez tous commentaires pertinents sur la qualité du code fourni, notamment en terme de lisibilité, maintenabilité et testabilité.
 
 ## Maintenabilité
-
+le code est dificille à prendre en main. Les commentaire sont assez court et vague et les fichier sont long. certain nom de variable manque de precision.
 
 ## Testabilité
-
+aucun test n'est mis en place et le code semble difficile a tester tel qu'il est actuelement.
 
 

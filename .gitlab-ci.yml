@@ -11,6 +11,6 @@ workflow:
 test-palindrome:
   stage: test
   script:
-    - echo "Testing geometry"
-    - cd tp3_geometry
+    - echo "Testing simulation"
+    - cd Social_simulation_base_egui
     - cargo test
