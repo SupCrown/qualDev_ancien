@@ -1,5 +1,7 @@
 mod app;
 mod person;
+mod world;
+mod social_simulation;
 
 use eframe::{App, CreationContext};
 use rand::Rng;
