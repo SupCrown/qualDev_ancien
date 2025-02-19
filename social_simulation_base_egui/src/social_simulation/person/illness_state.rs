@@ -4,3 +4,10 @@ pub enum IllnessState {
     Recovered,
     Dead,
 }
+
+
+impl PartialEq for IllnessState {
+    fn eq(&self, other: &Self) -> bool {
+        self == other
+    }
+}

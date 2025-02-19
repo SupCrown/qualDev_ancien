@@ -104,7 +104,7 @@ impl eframe::App for SocialSimulationApp {
 
             // Draw circles on a painter
             for p in self.person_positions.iter() {
-                let p = Vec2::new(p.0, p.1);
+                 let p = Vec2::new(p.0, p.1);
                 painter.circle_filled(
                     response.rect.left_top() + p,
                     self.person_radius,
