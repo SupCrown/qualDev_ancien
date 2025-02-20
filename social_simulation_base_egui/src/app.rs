@@ -20,6 +20,7 @@ impl SocialSimulationApp {
             }),
             person_radius: 3.0,
             steps_per_frame: 1,
+
         }
     }
 }
@@ -64,6 +65,10 @@ impl eframe::App for SocialSimulationApp {
                 }
             }
             ui.add(egui::Slider::new(&mut self.steps_per_frame, 0..=200).text("Steps per frame"));
+            ui.add(egui::Slider::new(&mut self.social_simulation.infection_percent, 0.0..=1.0).text("infection chances"));
+            ui.add(egui::Slider::new(&mut self.social_simulation.mortality, 0.0..=1.0).text("mortality"));
+            ui.add(egui::Slider::new(&mut self.social_simulation.recovery_chances, 0.0..=1.0).text("recovery chances"));
+
 
             ui.separator();
 
@@ -105,6 +110,19 @@ impl eframe::App for SocialSimulationApp {
                         response.rect.left_top() + pos,
                         self.person_radius,
                         egui::Color32::from_rgb(100, 200, 100),
+                    );
+                }else if p.state == IllnessState::Dead {
+                    painter.circle_filled(
+                        response.rect.left_top() + pos,
+                        self.person_radius,
+                        egui::Color32::from_rgb(255, 255, 255),
+                    );
+                }else if p.state == IllnessState::Recovered
+                {
+                    painter.circle_filled(
+                        response.rect.left_top() + pos,
+                        self.person_radius,
+                        egui::Color32::from_rgb(0, 0, 200),
                     );
                 }
             }
