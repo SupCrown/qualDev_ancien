@@ -1,9 +1,11 @@
 use egui::{Sense, Vec2};
 use rand::Rng;
+use crate::social_simulation::person::illness_state::IllnessState;
+use crate::social_simulation::SocialSimulation;
+use crate::social_simulation::world::World;
 
 pub struct SocialSimulationApp {
-    person_positions: Vec<(f32, f32)>,
-    person_speeds: Vec<(f32, f32)>,
+    social_simulation:SocialSimulation,
     person_radius: f32,
     steps_per_frame: u32,
 }
@@ -11,23 +13,10 @@ pub struct SocialSimulationApp {
 impl SocialSimulationApp {
     /// Called once before the first frame.
     pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
-        let mut entities_positions = Vec::new();
-        let mut entities_speeds = Vec::new();
 
-        let mut rng = rand::thread_rng();
-        for _ in 0..200 {
-            let position = (rng.gen_range(0..800) as f32, rng.gen_range(0..600) as f32);
-            let speed = (
-                rng.gen_range(-1.0..=1.0) as f32,
-                rng.gen_range(-1.0..=1.0) as f32,
-            );
-            entities_positions.push(position);
-            entities_speeds.push(speed);
-        }
 
         SocialSimulationApp {
-            person_positions: entities_positions,
-            person_speeds: entities_speeds,
+            social_simulation: SocialSimulation::new(World { width: 600, height: 800 }),
             person_radius: 3.0,
             steps_per_frame: 1,
         }
@@ -103,29 +92,36 @@ impl eframe::App for SocialSimulationApp {
             );
 
             // Draw circles on a painter
-            for p in self.person_positions.iter() {
-                 let p = Vec2::new(p.0, p.1);
+            for p in self.social_simulation.population.iter() {
+                 let pos = Vec2::new(p.position.x as f32, p.position.y as f32);
+                if p.state == IllnessState::Infected{
+                    painter.circle_filled(
+                        response.rect.left_top() + pos,
+                        self.person_radius,
+                        egui::Color32::from_rgb(200, 0, 0),
+                    );
+                }else if p.state == IllnessState::Healthy{
                 painter.circle_filled(
-                    response.rect.left_top() + p,
+                    response.rect.left_top() + pos,
                     self.person_radius,
                     egui::Color32::from_rgb(100, 200, 100),
-                );
+                );}
             }
 
             for _ in 0..self.steps_per_frame {
                 for i in 0..200 as usize {
-                    self.person_positions[i].0 += self.person_speeds[i].0;
-                    self.person_positions[i].1 += self.person_speeds[i].1;
+                    self.social_simulation.population[i].position.x += self.social_simulation.population[i].velocity.vx;
+                    self.social_simulation.population[i].position.y += self.social_simulation.population[i].velocity.vy;
 
-                    if self.person_positions[i].0 > 800 as f32 {
-                        self.person_positions[i].0 = 0.0;
-                    } else if self.person_positions[i].0 < 0.0 {
-                        self.person_positions[i].0 = 800 as f32;
+                    if self.social_simulation.population[i].position.x > self.social_simulation.world.height as f64 {
+                        self.social_simulation.population[i].position.x = 0.0;
+                    } else if self.social_simulation.population[i].position.x < 0.0 {
+                        self.social_simulation.population[i].position.x = self.social_simulation.world.height as f64;
                     }
-                    if self.person_positions[i].1 > 600 as f32 {
-                        self.person_positions[i].1 = 0.0;
-                    } else if self.person_positions[i].1 < 0.0 {
-                        self.person_positions[i].1 = 600 as f32;
+                    if self.social_simulation.population[i].position.y > self.social_simulation.world.width as f64 {
+                        self.social_simulation.population[i].position.y = 0.0;
+                    } else if self.social_simulation.population[i].position.y < 0.0 {
+                        self.social_simulation.population[i].position.y = self.social_simulation.world.width as f64;
                     }
                 }
             }

@@ -17,7 +17,7 @@ pub struct SocialSimulation{
 }
 
 impl SocialSimulation{
-    pub fn new(world: World, _cc: &eframe::CreationContext<'_>)-> Self{
+    pub fn new(world: World)-> Self{
         let mut rng1 = rand::thread_rng();
         let mut rng2 = rand::thread_rng();
 
