@@ -1,5 +1,5 @@
-use std::f64::consts::PI;
 use crate::social_simulation::person::vec2d::Vec2D;
+use std::f64::consts::PI;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Position {
@@ -9,16 +9,15 @@ pub struct Position {
     pub y: f64,
 }
 
-impl Position{
-    pub fn add(&self, velocity:Vec2D)-> Position{
-        Position{ x: self.x + velocity.vx, y: self.y + velocity.vy }
-    }
-
-    pub fn new(x:f64,y:f64 )-> Self{
-        Position{
-            x,
-            y,
+impl Position {
+    pub fn add(&self, velocity: Vec2D) -> Position {
+        Position {
+            x: self.x + velocity.vx,
+            y: self.y + velocity.vy,
         }
     }
-}
 
+    pub fn new(x: f64, y: f64) -> Self {
+        Position { x, y }
+    }
+}

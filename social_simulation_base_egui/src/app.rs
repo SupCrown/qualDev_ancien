@@ -1,11 +1,11 @@
+use crate::social_simulation::person::illness_state::IllnessState;
+use crate::social_simulation::world::World;
+use crate::social_simulation::SocialSimulation;
 use egui::{Sense, Vec2};
 use rand::Rng;
-use crate::social_simulation::person::illness_state::IllnessState;
-use crate::social_simulation::SocialSimulation;
-use crate::social_simulation::world::World;
 
 pub struct SocialSimulationApp {
-    social_simulation:SocialSimulation,
+    social_simulation: SocialSimulation,
     person_radius: f32,
     steps_per_frame: u32,
 }
@@ -13,10 +13,11 @@ pub struct SocialSimulationApp {
 impl SocialSimulationApp {
     /// Called once before the first frame.
     pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
-
-
         SocialSimulationApp {
-            social_simulation: SocialSimulation::new(World { width: 600, height: 800 }),
+            social_simulation: SocialSimulation::new(World {
+                width: 600,
+                height: 800,
+            }),
             person_radius: 3.0,
             steps_per_frame: 1,
         }
@@ -26,7 +27,6 @@ impl SocialSimulationApp {
 impl eframe::App for SocialSimulationApp {
     /// Called each time the UI needs repainting, which may be many times per second.
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
             // The top panel is often a good place for a menu bar:
 
@@ -93,39 +93,25 @@ impl eframe::App for SocialSimulationApp {
 
             // Draw circles on a painter
             for p in self.social_simulation.population.iter() {
-                 let pos = Vec2::new(p.position.x as f32, p.position.y as f32);
-                if p.state == IllnessState::Infected{
+                let pos = Vec2::new(p.position.x as f32, p.position.y as f32);
+                if p.state == IllnessState::Infected {
                     painter.circle_filled(
                         response.rect.left_top() + pos,
                         self.person_radius,
                         egui::Color32::from_rgb(200, 0, 0),
                     );
-                }else if p.state == IllnessState::Healthy{
-                painter.circle_filled(
-                    response.rect.left_top() + pos,
-                    self.person_radius,
-                    egui::Color32::from_rgb(100, 200, 100),
-                );}
-            }
-
-            for _ in 0..self.steps_per_frame {
-                for i in 0..200 as usize {
-                    self.social_simulation.population[i].position.x += self.social_simulation.population[i].velocity.vx;
-                    self.social_simulation.population[i].position.y += self.social_simulation.population[i].velocity.vy;
-
-                    if self.social_simulation.population[i].position.x > self.social_simulation.world.height as f64 {
-                        self.social_simulation.population[i].position.x = 0.0;
-                    } else if self.social_simulation.population[i].position.x < 0.0 {
-                        self.social_simulation.population[i].position.x = self.social_simulation.world.height as f64;
-                    }
-                    if self.social_simulation.population[i].position.y > self.social_simulation.world.width as f64 {
-                        self.social_simulation.population[i].position.y = 0.0;
-                    } else if self.social_simulation.population[i].position.y < 0.0 {
-                        self.social_simulation.population[i].position.y = self.social_simulation.world.width as f64;
-                    }
+                } else if p.state == IllnessState::Healthy {
+                    painter.circle_filled(
+                        response.rect.left_top() + pos,
+                        self.person_radius,
+                        egui::Color32::from_rgb(100, 200, 100),
+                    );
                 }
             }
 
+            for _ in 0..self.steps_per_frame {
+                self.social_simulation.step();
+            }
         });
 
         // Quit app if Escape is pressed

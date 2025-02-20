@@ -5,6 +5,3 @@ pub struct Vec2D {
     /// Coordonnée Y du vecteur.
     pub vy: f64,
 }
-
-
-
