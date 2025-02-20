@@ -15,8 +15,8 @@ impl SocialSimulationApp {
     pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
         SocialSimulationApp {
             social_simulation: SocialSimulation::new(World {
-                width: 600,
-                height: 800,
+                width: 800,
+                height: 600,
             }),
             person_radius: 3.0,
             steps_per_frame: 1,

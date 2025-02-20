@@ -56,8 +56,11 @@ impl SocialSimulation {
     }
 
     pub fn step(&mut self) {
+        let pop = self.population.borrow();
         for person in &mut self.population {
             person.step();
+            person.gets_infected(pop);
         }
+
     }
 }

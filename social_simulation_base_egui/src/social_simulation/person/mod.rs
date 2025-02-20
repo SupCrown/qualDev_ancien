@@ -54,20 +54,21 @@ impl Person {
         if self.position.y < 0.0 {
             self.position.y = self.world.height as f64;
         }
+
     }
-    pub fn who_is_in_radius(&mut self, mut population: Vec<Person>) -> Vec<Person> {
+    pub fn gets_infected(&mut self, population: &Vec<Person>) -> bool {
         let mut rng1 = rand::thread_rng();
 
-        for mut person in &population {
-            if self.is_in_radius(person.position) {
-                if person.state == IllnessState::Infected {
+        for mut person in &population.ite {
+            if person.state == IllnessState::Infected {
+                if self.is_in_radius(person.position) {
                     if rng1.gen_range(0.0..=1.0) < 0.15 {
-                        self.state = IllnessState::Infected
+                        return true
                     }
                 }
             }
         }
-        population
+        false
     }
 
     pub fn is_in_radius(&self, position: Position) -> bool {
