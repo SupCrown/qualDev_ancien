@@ -37,6 +37,7 @@ impl Person {
 
     // Met à jour la position de la personne
     pub fn step(&mut self) {
+        if self.state != IllnessState::Dead {
         self.position = self.position.add(self.velocity);
 
         if self.position.x > self.world.width as f64 {
@@ -50,7 +51,7 @@ impl Person {
         }
         if self.position.y < 0.0 {
             self.position.y = self.world.height as f64;
-        }
+        }}
     }
 
     // Vérifie si la personne doit être infectée à partir d'un snapshot de la population.

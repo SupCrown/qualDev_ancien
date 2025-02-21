@@ -1,3 +1,4 @@
+use eframe::egui;
 use crate::social_simulation::person::illness_state::IllnessState;
 use crate::social_simulation::world::World;
 use crate::social_simulation::SocialSimulation;
@@ -14,10 +15,7 @@ impl SocialSimulationApp {
     /// Called once before the first frame.
     pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
         SocialSimulationApp {
-            social_simulation: SocialSimulation::new(World {
-                width: 800,
-                height: 600,
-            }),
+            social_simulation: SocialSimulation::new().unwrap(),
             person_radius: 3.0,
             steps_per_frame: 1,
 
@@ -51,6 +49,11 @@ impl eframe::App for SocialSimulationApp {
         egui::SidePanel::left("side_panel").show(ctx, |ui| {
             ui.heading("Configuration");
             ui.add(egui::Slider::new(&mut self.person_radius, 1.0..=10.0).text("Radius"));
+            ui.add(egui::Slider::new(&mut self.steps_per_frame, 0..=200).text("Steps per frame"));
+            ui.add(egui::Slider::new(&mut self.social_simulation.infection_percent, 0.0..=1.0).text("infection chances"));
+            ui.add(egui::Slider::new(&mut self.social_simulation.mortality, 0.0..=1.0).text("mortality"));
+            ui.add(egui::Slider::new(&mut self.social_simulation.recovery_chances, 0.0..=1.0).text("recovery chances"));
+
             if ui.button("Increment").clicked() {
                 self.person_radius += 1.0;
             }
@@ -64,13 +67,21 @@ impl eframe::App for SocialSimulationApp {
                     self.steps_per_frame = 1;
                 }
             }
-            ui.add(egui::Slider::new(&mut self.steps_per_frame, 0..=200).text("Steps per frame"));
-            ui.add(egui::Slider::new(&mut self.social_simulation.infection_percent, 0.0..=1.0).text("infection chances"));
-            ui.add(egui::Slider::new(&mut self.social_simulation.mortality, 0.0..=1.0).text("mortality"));
-            ui.add(egui::Slider::new(&mut self.social_simulation.recovery_chances, 0.0..=1.0).text("recovery chances"));
+
+            if ui.button("infect someone").clicked() {
+                self.social_simulation.infect_someone();
+            }
+
 
 
             ui.separator();
+            ui.heading("info");
+            ui.label("population : ".to_owned() + &*self.social_simulation.total_population.to_string());
+            ui.label("Healthy : ".to_owned() + &*self.social_simulation.total_healthy.to_string());
+            ui.label("Infected : ".to_owned() + &*self.social_simulation.total_infected.to_string());
+            ui.label("dead : ".to_owned() + &*self.social_simulation.total_dead.to_string());
+            ui.label("recovered : ".to_owned() + &*self.social_simulation.total_recovered.to_string());
+
 
             ui.with_layout(egui::Layout::bottom_up(egui::Align::LEFT), |ui| {
                 powered_by_egui_and_eframe(ui);
@@ -82,7 +93,7 @@ impl eframe::App for SocialSimulationApp {
             ui.heading("Social Simulation");
 
             let (response, painter) = ui.allocate_painter(
-                Vec2::new(800.0, 600.0),
+                Vec2::new(self.social_simulation.world.width as f32, self.social_simulation.world.height as f32),
                 Sense {
                     click: false,
                     drag: false,
