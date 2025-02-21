@@ -2333,11 +2333,11 @@ name = "social_simulation"
 version = "0.1.0"
 dependencies = [
  "eframe",
- "egui",
  "env_logger",
  "getrandom",
  "log",
  "rand",
+ "serde",
  "wasm-bindgen-futures",
  "web-sys",
 ]

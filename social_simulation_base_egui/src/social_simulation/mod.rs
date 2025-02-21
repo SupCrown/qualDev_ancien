@@ -1,9 +1,11 @@
+use std::fs::File;
 use crate::social_simulation::person::Person;
 use crate::social_simulation::person::illness_state::IllnessState;
 use crate::social_simulation::person::position::Position;
 use crate::social_simulation::person::vec2d::Vec2D;
 use crate::social_simulation::world::World;
 use rand::Rng;
+use serde::{Deserialize, Serialize};
 
 pub mod person;
 pub mod world;
@@ -16,19 +18,26 @@ pub struct SocialSimulation {
     pub infection_percent: f32,
     pub recovery_chances: f32,
     pub mortality: f32,
+    pub total_infected:u32,
+    pub total_healthy:u32,
+    pub total_dead:u32,
+    pub total_recovered:u32,
+    pub total_population:u32,
+
+
 
 
 }
 
 impl SocialSimulation {
-    pub fn new(world: World) -> Self {
+    pub fn new(world: World, total_population:u32) -> Self {
+        let mut file = File::open("../../config.json");
         let mut rng1 = rand::thread_rng();
         let mut rng2 = rand::thread_rng();
 
         let mut popu: Vec<Person> = vec![];
 
-        // Crée 200 personnes saines
-        for _ in 0..200 {
+        for _ in 0..total_population-1 {
             let position = Position::new(
                 rng1.gen_range(0..world.height) as f64,
                 rng2.gen_range(0..world.width) as f64,
@@ -46,6 +55,7 @@ impl SocialSimulation {
             rng1.gen_range(0..world.height) as f64,
             rng2.gen_range(0..world.width) as f64,
         );
+
         let velocity = Vec2D {
             vx: rng1.gen_range(-1.0..=1.0),
             vy: rng2.gen_range(-1.0..=1.0),
@@ -61,6 +71,11 @@ impl SocialSimulation {
             infection_percent: 0.0,
             recovery_chances: 0.0,
             mortality: 0.0,
+            total_infected: 0,
+            total_healthy: 0,
+            total_dead: 0,
+            total_recovered: 0,
+            total_population,
         }
     }
 
