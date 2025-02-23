@@ -3,7 +3,7 @@
 use eframe::egui;
 
 // hide console window on Windows in release
-                                                                   // When compiling natively:
+// When compiling natively:
 #[cfg(not(target_arch = "wasm32"))]
 fn main() -> eframe::Result {
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).

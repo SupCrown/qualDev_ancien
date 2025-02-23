@@ -20,6 +20,9 @@ eframe = { version = "0.28", default-features = false, features = [
 log = "0.4"
 getrandom = { version = "0.2.15", features = ["js"] }
 
+egui = "0.28" # Version principale de egui
+egui_plot = "0.28" # Version compatible avec egui 0.28
+
 rand = "0.8.5"
 wasm-bindgen-futures = "0.4.50"
 web-sys = "0.3.77"
