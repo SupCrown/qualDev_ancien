@@ -1,4 +1,4 @@
-{
+config-radius.json{
             "world": {"width": 10, "height": 10},
             "total_population": 100,
             "infection_percent": 1000.0,

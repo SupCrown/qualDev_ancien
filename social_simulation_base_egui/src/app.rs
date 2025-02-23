@@ -83,7 +83,6 @@ impl eframe::App for SocialSimulationApp {
                 ui.label(format!("Recovered: {}", self.social_simulation.total_recovered));
                 ui.label(format!("Masks: {}", self.social_simulation.total_masks));
                 ui.label(format!("Vaccinated: {}", self.social_simulation.total_vaccinated));
-                ui.label(format!("Mortality: {:.2}", self.social_simulation.mortality));
             }
         });
 
