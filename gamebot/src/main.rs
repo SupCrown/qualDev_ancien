@@ -5,7 +5,7 @@ use std::net::TcpStream;
 
 fn main() {
 
-    if let Ok(mut stream) = TcpStream::connect("172.19.0.1:6969") {
+    if let Ok(mut stream) = TcpStream::connect("172.17.0.1:6969") {
         println!("Connected to the server!");
         stream.write(b"GunTrig=1.0");
     } else {
