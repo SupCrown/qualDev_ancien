@@ -169,6 +169,7 @@ impl SocialSimulation {
     pub fn step(&mut self) {
         let pop_snapshot = self.population.clone();
         for index in 0..self.population.len() {
+            // Tous ces appels de fonctions auraient pû être fait dans la fonction step de la structure Person pour réduire la dépendance entre SocialSimulation et Person
             self.population[index].step();
             self.population[index].gets_infected(self.infection_percent, &pop_snapshot);
             self.population[index].dies(self.mortality);
