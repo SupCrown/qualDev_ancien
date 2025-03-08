@@ -1,8 +1,8 @@
 {
             "world": {
-              "width": 700,
-              "height": 700},
-            "total_population": 500,
+              "width": 1000,
+              "height": 1000},
+            "total_population": 1500,
             "infection_percent": 20.0,
             "recovery_chances": 0.09,
             "mortality": 0.009
