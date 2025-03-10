@@ -1,24 +1,48 @@
+
 mod bot;
 
-use std::io::Write;
+use bot::Bot;
 use std::net::TcpStream;
-use std::thread;
-use std::time::Duration;
-use crate::bot::Bot;
+use std::io::{self, Write};
 
-fn main() {
+fn main() -> io::Result<()> {
+    // Demander l'adresse du serveur
+    print!("Entrez l'adresse du serveur (par défaut 127.17.0.1:6969): ");
+    io::stdout().flush()?;
 
+    let mut address = String::new();
+    io::stdin().read_line(&mut address)?;
+    let address = address.trim();
+    let address = if address.is_empty() { "127.17.0.1:6969" } else { address };
 
-    let connection = TcpStream::connect("172.17.0.1:6969").unwrap();
-    let mut bot = Bot::new(connection, "fabrice".to_string());
+    // Demander le nom du bot
+    print!("Entrez le nom du bot (par défaut RustBot): ");
+    io::stdout().flush()?;
 
-    // Démarre le thread de déplacement
-    bot.track_and_shoot_enemy();
+    let mut name = String::new();
+    io::stdin().read_line(&mut name)?;
+    let name = name.trim();
+    let name = if name.is_empty() { "RustBot" } else { name };
 
-    // Laisse le bot bouger pendant 3 secondes
-    thread::sleep(Duration::from_secs(1000));
+    println!("Connexion au serveur {}...", address);
 
-    // Stoppe le déplacement
-    bot.stop_tracking();
+    match TcpStream::connect(address) {
+        Ok(stream) => {
+            println!("Connecté! Initialisation du bot...");
+            let mut bot = Bot::new(stream);
 
+            // Initialiser le bot avec son nom et sa couleur (rouge vif)
+            bot.initialize(name, (255, 0, 0));
+            println!("Bot '{}' initialisé et prêt au combat!", name);
+
+            // Lancer le bot
+            bot.run();
+
+            Ok(())
+        },
+        Err(e) => {
+            eprintln!("Erreur de connexion au serveur: {}", e);
+            Err(e)
+        }
+    }
 }
