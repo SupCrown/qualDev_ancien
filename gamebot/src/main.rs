@@ -6,6 +6,7 @@ use std::io::{Write, BufRead, BufReader};
 use std::net::TcpStream;
 use rand::Rng;
 use serde_json::Value;
+use std::env;
 
 // Actions possibles
 const ACTIONS: [&str; 4] = ["MOVE_LEFT", "MOVE_RIGHT", "ADVANCE", "SHOOT"];
@@ -19,27 +20,29 @@ struct SerializableQTable {
 
 // Fonction principale
 fn main() {
-    // Connexion au serveur
-    let server_address = "172.17.0.1:6969";
-    let mut connection = TcpStream::connect(server_address)
-        .expect("Impossible de se connecter au serveur. Vérifie l'adresse et le serveur.");
+    // Lire les arguments de la ligne de commande
+    let (server_address, bot_name) = get_arguments();
 
-    // Identifie le bot
-    send_command(&mut connection, "NAME=QBot");
+    // Connexion au serveur
+    let mut connection = TcpStream::connect(&server_address)
+        .unwrap_or_else(|_| panic!("Impossible de se connecter au serveur : {}", server_address));
+
+    // Identification du bot
+    send_command(&mut connection, &format!("NAME={}", bot_name));
     send_command(&mut connection, "COL=255=0=0");
 
     // Charger la Q-table si elle existe
     let mut q_table = load_q_table("q_table.json");
 
     // Paramètres du Q-learning
-    let learning_rate = 0.1;
+    let learning_rate = 0.2;
     let discount_factor = 0.9;
-    let epsilon = 0.08; // Probabilité d'explorer
+    let epsilon = 0.6; // Probabilité d'explorer
 
     // Boucle principale
     let mut last_orient: Option<f32> = None;       // Stocker l'orientation précédente du bot
     let mut stuck_counter = 0;                    // Compteur bloqué
-    let stuck_threshold = 30;                     // Nombre de cycles avant de juger le bot bloqué
+    let stuck_threshold = 15;                     // Nombre de cycles avant de juger le bot bloqué
 
     loop {
         // Obtenir les observations actuelles
@@ -57,8 +60,8 @@ fn main() {
 
         // Exécuter l'action choisie
         match action {
-            0 => send_command(&mut connection, "MotL=0.3#MotR=0.78"),   // MOVE_LEFT
-            1 => send_command(&mut connection, "MotL=0.78#MotR=0.3"),   // MOVE_RIGHT
+            0 => send_command(&mut connection, "MotL=0.4#MotR=0.88"),   // MOVE_LEFT
+            1 => send_command(&mut connection, "MotL=0.88#MotR=0.4"),   // MOVE_RIGHT
             2 => send_command(&mut connection, "MotL=1#MotR=1"),     // ADVANCE
             3 => send_command(&mut connection, "GunTrig=1"),         // SHOOT
             _ => {},
@@ -93,10 +96,32 @@ fn main() {
         update_q_table(&mut q_table, state, action, reward, next_state, learning_rate, discount_factor);
 
         // Sauvegarder périodiquement la Q-table
-        save_q_table(&q_table, "q_table.json");
+        save_q_table(&q_table, "q_table_020906.json");
 
-        // Pause pour laisser le bot réagir
     }
+}
+
+fn get_arguments() -> (String, String) {
+    // Obtenir les arguments de la ligne de commande
+    let args: Vec<String> = env::args().collect();
+
+    // Valeur par défaut pour l'adresse IP
+    let default_ip = "172.17.0.1:6969".to_string();
+
+    // Vérifier si le pseudo est fourni
+    if args.len() < 2 {
+        eprintln!("Erreur : Vous devez fournir un pseudo !");
+        eprintln!("Utilisation : {} <pseudo> [adresse_ip]", args[0]);
+        std::process::exit(1); // Quitter le programme avec un code d'erreur
+    }
+
+    // Le pseudo est obligatoire (2e argument)
+    let name = args[1].clone();
+
+    // L'adresse IP est facultative (3e argument)
+    let ip = args.get(2).unwrap_or(&default_ip).clone();
+
+    (ip, name)
 }
 
 
@@ -176,9 +201,9 @@ fn read_response(connection: &mut TcpStream) -> String {
 
 // Discrétisation des observations
 fn discretize_state(enemy_orientation: f32, enemy_distance: f32, proj_orientation: f32, proj_distance: f32) -> (usize, usize, usize, usize) {
-    let enemy_orientation_bin = (enemy_orientation * 5.0).floor() as usize; // Réduit à 5 buckets (0.0 -> 1.0 devient 5 intervalles)
-    let enemy_distance_bin = (enemy_distance / 30.0).floor() as usize;      // Divise les distances en grands intervalles (30 unités par bucket)
-    let proj_orientation_bin = (proj_orientation * 5.0).floor() as usize;  // Similaire à l'orientation ennemie
+    let enemy_orientation_bin = (enemy_orientation * 10.0).floor() as usize; // Réduit à 5 buckets (0.0 -> 1.0 devient 5 intervalles)
+    let enemy_distance_bin = (enemy_distance / 15.0).floor() as usize;      // Divise les distances en grands intervalles (30 unités par bucket)
+    let proj_orientation_bin = (proj_orientation * 10.0).floor() as usize;  // Similaire à l'orientation ennemie
     let proj_distance_bin = (proj_distance / 30.0).floor() as usize;       // Pareil pour les projectiles
 
     // Retourne les valeurs disrétisées comme un état unique
@@ -220,7 +245,7 @@ fn calculate_reward(
     let mut reward = 0.0;
 
     // Récompense : tir aligné avec l'ennemi
-    if action == 3 && enemy_distance < 30.0 && (enemy_orientation - 0.5).abs() < 0.1 {
+    if action == 3 && enemy_distance < 30.0 && (enemy_orientation - 0.5).abs() < 0.02 {
         reward += 10.0; // Récompense pour un tir aligné
         println!("Récompense : tir précis aligné (+10)");
     }
@@ -234,7 +259,7 @@ fn calculate_reward(
 
     // Récompense : réduction de la distance à l'ennemi
     if enemy_distance < 20.0 {
-        reward += 2.0; // Récompense pour s'approcher de l'ennemi
+        reward += 3.0; // Récompense pour s'approcher de l'ennemi
         //println!("Récompense : réduction de distance à l'ennemi (+2)");
     }
 
@@ -264,9 +289,9 @@ fn calculate_reward(
     }*/
 
     // Malus : actions inutiles ou stagnation
-    if action == 2 && enemy_distance > 50.0 { // Action d'avancer avec ennemi éloigné
-        reward -= 2.0; // Pénalité pour inefficacité
-        println!("Malus : action inefficace (avance inutile, -2)");
+    if action == 2 && enemy_distance > 27.0 { // Action d'avancer avec ennemi éloigné
+        reward -= 5.0; // Pénalité pour inefficacité
+        println!("Malus : action inefficace (avance inutile, -5)");
     }
 
     reward
