@@ -11,3 +11,9 @@ clap = { version = "4.5.32", features = ["derive"] }
 [[bin]]
 name = "team"
 path = "src/team.rs"
+
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
+default-run = "main"

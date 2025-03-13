@@ -6,12 +6,13 @@ use std::time::Duration;
 use rand::Rng;
 
 pub struct Bot {
-    pub(crate) connection: TcpStream,
-    pub(crate) name: String,
-    stop_signal: Arc<Mutex<Option<Sender<()>>>>,
+    pub(crate) connection: TcpStream, // Connexion TCP au serveur
+    pub(crate) name: String,         // Nom du bot
+    stop_signal: Arc<Mutex<Option<Sender<()>>>>, // Signal pour arrêter le tracking
 }
 
 impl Bot {
+    // Crée une nouvelle instance de Bot avec une connexion TCP et un nom
     pub fn new(connection: TcpStream, name: String) -> Self {
         Bot {
             connection,
@@ -20,13 +21,14 @@ impl Bot {
         }
     }
 
+    // Établit la connexion au serveur et envoie le nom du bot
     pub fn connect(&mut self) {
         TcpStream::connect("172.17.0.1:6969").unwrap();
         println!("NAME={}", self.name);
-        self.connection.write_all(format!("NAME={}",self.name).as_bytes()).unwrap();
+        self.connection.write_all(format!("NAME={}", self.name).as_bytes()).unwrap();
     }
 
-    // Optimisé pour envoyer des commandes plus rapidement
+    // Envoie une commande au serveur avec un saut de ligne si nécessaire
     pub fn send_command(&mut self, command: &str) {
         let cmd_with_newline = if command.ends_with('\n') {
             command.to_string()
@@ -41,21 +43,23 @@ impl Bot {
         }
     }
 
-    // Optimisé pour envoyer plusieurs commandes d'un coup
+    // Envoie plusieurs commandes en une seule fois, séparées par "#"
     fn send_commands(&mut self, commands: &[&str]) {
         let combined_command = commands.join("#");
         self.send_command(&combined_command);
     }
 
+    // Définit la puissance du moteur gauche
     fn mot_l(&mut self, pow: f32) {
         self.send_command(&format!("MotL={}", pow));
     }
 
+    // Définit la puissance du moteur droit
     fn mot_r(&mut self, pow: f32) {
         self.send_command(&format!("MotR={}", pow));
     }
 
-    // Optimisé pour envoyer les commandes moteur en une seule fois
+    // Définit la puissance des deux moteurs en une seule commande
     fn set_motors(&mut self, left: f32, right: f32) {
         self.send_commands(&[
             &format!("MotL={}", left),
@@ -63,17 +67,19 @@ impl Bot {
         ]);
     }
 
+    // Active ou désactive le tir en fonction de la valeur de `shoot`
     pub fn shoot(&mut self, shoot: bool) {
         let trigger_value = if shoot { "1.0" } else { "0.0" };
         self.send_command(&format!("GunTrig={}", trigger_value));
     }
 
+    // Ajuste la position du canon en fonction de la valeur de `traverse`
     pub fn aim_gun(&mut self, traverse: f32) {
         let traverse_value = traverse.max(0.0).min(1.0);
         self.send_command(&format!("GunTrav={}", traverse_value));
     }
 
-    // Optimisé pour régler le tir et la visée en une seule commande
+    // Combine l'ajustement du canon et le tir en une seule commande
     pub fn aim_and_shoot(&mut self, traverse: f32, shoot: bool) {
         let traverse_value = traverse.max(0.0).min(1.0);
         let trigger_value = if shoot { "1.0" } else { "0.0" };
@@ -84,6 +90,7 @@ impl Bot {
         ]);
     }
 
+    // Récupère la liste des joueurs connectés en envoyant la commande "NLIST"
     pub fn get_player_list(&mut self) -> Vec<String> {
         self.send_command("NLIST");
 
@@ -99,14 +106,14 @@ impl Bot {
         }
     }
 
+    // Vérifie si un joueur est un ennemi en vérifiant si son nom ne commence pas par "TeamAlpha-"
     pub fn is_enemy(&mut self, name: &str) -> bool {
-        // Vérifier si le nom commence par "TeamAlpha-"
         !name.starts_with("TeamAlpha-")
     }
 
-    // Méthode principale pour suivre et tirer sur les ennemis - optimisée pour la vitesse
+    // Méthode principale pour suivre et tirer sur les ennemis
     pub fn track_and_shoot_enemy(&mut self) {
-        self.connection.write_all(format!("NAME={}",self.name).as_bytes()).unwrap();
+        self.connection.write_all(format!("NAME={}", self.name).as_bytes()).unwrap();
         let mut bot = self.clone();
         let (tx, rx): (Sender<()>, Receiver<()>) = channel();
 
@@ -122,46 +129,46 @@ impl Bot {
             let mut cproj_check_counter = 0;
             let mut needs_evasion = false;
 
-            // Message initial pour le jeu
+            // Envoie un message initial au serveur
             bot.send_command("MSG=Chasse en cours!");
 
             loop {
                 if rx.try_recv().is_ok() {
                     println!("Arrêt de la poursuite!");
-                    bot.set_motors(0.5, 0.5);  // Arrêt complet
-                    bot.shoot(false);
+                    bot.set_motors(0.5, 0.5);  // Arrête les moteurs
+                    bot.shoot(false);          // Arrête de tirer
                     break;
                 }
 
-                // Vérifier les projectiles à éviter tous les 5 cycles
+                // Vérifie les projectiles à éviter tous les 5 cycles
                 cproj_check_counter += 1;
                 if cproj_check_counter >= 5 {
                     cproj_check_counter = 0;
                     needs_evasion = bot.check_for_incoming_projectiles();
                 }
 
-                // Si un projectile arrive, priorité à l'évitement
+                // Si un projectile est détecté, priorité à l'évitement
                 if needs_evasion {
                     bot.evasive_maneuvers();
-                    is_firing = false;  // Ne pas tirer pendant l'évitement
+                    is_firing = false;  // Arrête de tirer pendant l'évitement
                     bot.shoot(false);
 
-                    // Continuer la boucle sans chercher d'ennemis pendant l'évitement
+                    // Continue la boucle sans chercher d'ennemis pendant l'évitement
                     thread::sleep(Duration::from_millis(5));
                     continue;
                 }
 
-                // Obtient les informations sur l'ennemi le plus proche - optimisé
+                // Obtient les informations sur l'ennemi le plus proche
                 if let Some((orientation, distance)) = bot.get_closest_enemy_fast() {
                     no_enemy_counter = 0;
                     last_enemy_data = Some((orientation, distance));
 
-                    // Poursuite à pleine vitesse
-                    bot.hunt_enemy_max_speed(orientation, distance);
+                    // Poursuit l'ennemi à pleine vitesse
+                    bot.hunt_enemy(orientation, distance);
 
-                    // Calcul du tir optimisé
+                    // Calcule la position optimale du canon
                     let gun_traverse = bot.calculate_optimal_gun_position(orientation, distance);
-                    let should_fire = bot.should_fire_precise(orientation, distance);
+                    let should_fire = bot.should_fire(orientation, distance);
 
                     // Combine les commandes de tir et d'orientation du canon
                     bot.aim_and_shoot(gun_traverse, should_fire);
@@ -169,7 +176,7 @@ impl Bot {
                     // Met à jour l'état du tir
                     is_firing = should_fire;
 
-                    // Affichage du statut
+                    // Affiche un message de statut
                     if should_fire && distance < 100.0 {
                         bot.send_command("MSG=Cible acquise - FEU!");
                     } else {
@@ -178,11 +185,11 @@ impl Bot {
                 } else {
                     no_enemy_counter += 1;
 
-                    // Continuer la poursuite dans la dernière direction connue pendant un court moment
+                    // Continue la poursuite dans la dernière direction connue pendant un court moment
                     if no_enemy_counter < 5 && last_enemy_data.is_some() {
                         let (last_orientation, last_distance) = last_enemy_data.unwrap();
-                        bot.hunt_enemy_max_speed(last_orientation, last_distance);
-                        // Maintenir le tir si on tirait déjà et que l'ennemi était proche
+                        bot.hunt_enemy(last_orientation, last_distance);
+                        // Continue de tirer si l'ennemi était proche
                         if is_firing && last_distance < 100.0 {
                             bot.shoot(true);
                         } else {
@@ -191,8 +198,8 @@ impl Bot {
                         }
                         bot.send_command("MSG=Reprise de contact...");
                     } else {
-                        // Recherche rapide et agressive
-                        bot.search_max_speed();
+                        // Recherche rapide et agressive si aucun ennemi n'est trouvé
+                        bot.search_ennemy();
                         if is_firing {
                             bot.shoot(false);
                             is_firing = false;
@@ -207,7 +214,6 @@ impl Bot {
             }
         });
     }
-
 
     // Vérifie s'il y a des projectiles à proximité qui nécessitent une évitement
     fn check_for_incoming_projectiles(&mut self) -> bool {
@@ -240,7 +246,7 @@ impl Bot {
         false
     }
 
-    // Manœuvres d'évitement de projectiles
+    // Effectue des manœuvres d'évitement de projectiles
     fn evasive_maneuvers(&mut self) {
         static mut EVASION_PATTERN: u8 = 0;
         static mut EVASION_COUNTER: u8 = 0;
@@ -248,13 +254,13 @@ impl Bot {
         unsafe {
             EVASION_COUNTER += 1;
 
-            // Changer de motif d'évitement après plusieurs itérations
+            // Change de motif d'évitement après plusieurs itérations
             if EVASION_COUNTER > 20 {
                 EVASION_PATTERN = (EVASION_PATTERN + 1) % 4;
                 EVASION_COUNTER = 0;
             }
 
-            // Différents motifs d'évitement pour être imprévisible
+            // Applique différents motifs d'évitement pour être imprévisible
             match EVASION_PATTERN {
                 0 => {
                     // Virage serré à gauche
@@ -280,6 +286,7 @@ impl Bot {
         }
     }
 
+    // Trouve l'ennemi le plus proche en parcourant la liste des joueurs
     pub fn get_closest_enemy_fast(&mut self) -> Option<(f32, f32)> {
         let player_list = self.get_player_list();
         let mut closest_enemy: Option<(f32, f32)> = None;
@@ -302,7 +309,7 @@ impl Bot {
                                     if parts.len() == 2 {
                                         if let (Ok(orientation), Ok(distance)) =
                                             (parts[0].parse::<f32>(), parts[1].parse::<f32>()) {
-                                            // Garder l'ennemi le plus proche
+                                            // Garde l'ennemi le plus proche
                                             if closest_enemy.is_none() || distance < closest_enemy.unwrap().1 {
                                                 closest_enemy = Some((orientation, distance));
                                             }
@@ -319,20 +326,21 @@ impl Bot {
 
         closest_enemy
     }
-    // Poursuite à vitesse maximale
-    pub fn hunt_enemy_max_speed(&mut self, orientation: f32, distance: f32) {
-        // Convertir l'orientation en angle relatif où 0.5 = devant
+
+    // Poursuit un ennemi en ajustant les moteurs pour se diriger vers lui
+    pub fn hunt_enemy(&mut self, orientation: f32, distance: f32) {
+        // Convertit l'orientation en angle relatif où 0.5 = devant
         let rel_orientation = if orientation > 0.5 {
             orientation - 1.0
         } else {
             orientation
         };
 
-        // Si l'ennemi est presque devant, avancer tout droit
+        // Si l'ennemi est presque devant, avance tout droit
         if rel_orientation.abs() < 0.1 {
             self.set_motors(1.0, 1.0);
         } else {
-            // Sinon, ajuster les moteurs pour tourner vers l'ennemi
+            // Sinon, ajuste les moteurs pour tourner vers l'ennemi
             let turn_intensity = rel_orientation.abs() * 2.0; // Facteur de virage
             let min_power = 0.7; // Puissance minimale pour maintenir la vitesse
 
@@ -349,14 +357,14 @@ impl Bot {
     }
 
 
-    // Recherche à vitesse maximale
-    pub fn search_max_speed(&mut self) {
+    // Recherche un ennemi en effectuant des mouvements de recherche
+    pub fn search_ennemy(&mut self) {
         static mut SEARCH_TARGET_ORIENTATION: f32 = 0.0;
         static mut SEARCH_STATE: u8 = 0; // 0: avancer, 1: tourner
         static mut LAST_ORIENTATION: f32 = 0.0;
 
         unsafe {
-            // Obtenir l'orientation actuelle du bot
+            // Obtient l'orientation actuelle du bot
             self.send_command("ORIENT");
             let mut buffer = [0; 512];
             if let Ok(bytes_read) = self.connection.try_clone().unwrap().read(&mut buffer) {
@@ -422,22 +430,22 @@ impl Bot {
         final_position.max(0.0).min(1.0)
     }
 
-    // Logique de tir améliorée et beaucoup plus précise
-    pub fn should_fire_precise(&self, orientation: f32, distance: f32) -> bool {
+    // Détermine si le bot doit tirer en fonction de la précision requise et de la distance
+    pub fn should_fire(&self, orientation: f32, distance: f32) -> bool {
         // Constantes optimisées
-        const MAX_FIRE_DISTANCE: f32 = 500.0; // Distance max de tir augmentée
+        const MAX_FIRE_DISTANCE: f32 = 500.0; // Distance maximale de tir
 
-        // Vérifier d'abord si la cible est à portée
+        // Vérifie si la cible est à portée
         if distance > MAX_FIRE_DISTANCE {
             return false;
         }
 
-        // Normaliser l'orientation pour faciliter les calculs
+        // Normalise l'orientation pour faciliter les calculs
         let rel_orientation = if orientation > 0.5 {
             orientation - 1.0
         } else {
             orientation
-        } - 0.5; // Dans la plage [-0.5, 0.5]
+        } - 0.5; // Plage [-0.5, 0.5]
 
         // La précision requise dépend de la distance
         // Plus la cible est loin, plus il faut être précis
@@ -448,11 +456,11 @@ impl Bot {
             _ => 0.025         // Longue distance: haute précision
         };
 
-        // Tir seulement si l'orientation est dans la tolérance
+        // Tire seulement si l'orientation est dans la tolérance
         rel_orientation.abs() < precision_requirement
     }
 
-    // Méthode d'arrêt du tracking
+    // Arrête le tracking en envoyant un signal d'arrêt
     pub fn stop_tracking(&self) {
         if let Some(ref tx) = *self.stop_signal.lock().unwrap() {
             let _ = tx.send(());
@@ -475,11 +483,116 @@ impl Clone for Bot {
 mod tests {
     use super::*;
 
+    // Teste la création d'un bot
     #[test]
     fn creation_bot() {
         let connection = TcpStream::connect("172.17.0.1:6969").unwrap();
-        let mut bot = Bot::new(connection, "fabrice".to_string());
+        let bot = Bot::new(connection, "fabrice".to_string());
 
+        // Vérifie que le nom du bot est correct
         assert_eq!(bot.name, "fabrice");
+    }
+
+    // Teste le calcul de la position optimale du canon
+    #[test]
+    fn test_calculate_optimal_gun_position() {
+        let connection = TcpStream::connect("172.17.0.1:6969").unwrap();
+        let bot = Bot::new(connection, "test_bot".to_string());
+
+        // Cas 1: Ennemi directement devant
+        let orientation = 0.5;
+        let distance = 100.0;
+        let gun_position = bot.calculate_optimal_gun_position(orientation, distance);
+        assert_eq!(gun_position, 0.5);
+
+        // Cas 2: Ennemi à gauche
+        let orientation = 0.25;
+        let gun_position = bot.calculate_optimal_gun_position(orientation, distance);
+        assert!(gun_position < 0.5);
+
+        // Cas 3: Ennemi à droite
+        let orientation = 0.75;
+        let gun_position = bot.calculate_optimal_gun_position(orientation, distance);
+        assert!(gun_position > 0.5);
+
+        // Cas 4: Ennemi très loin
+        let distance = 500.0;
+        let gun_position = bot.calculate_optimal_gun_position(orientation, distance);
+        assert!(gun_position >= 0.0 && gun_position <= 1.0);
+    }
+
+    // Teste la décision de tir
+    #[test]
+    fn test_should_fire() {
+        let connection = TcpStream::connect("172.17.0.1:6969").unwrap();
+        let bot = Bot::new(connection, "test_bot".to_string());
+
+        // Cas 1: Ennemi proche et bien aligné
+        let orientation = 0.5;
+        let distance = 50.0;
+        assert!(bot.should_fire(orientation, distance));
+
+        // Cas 2: Ennemi loin mais bien aligné
+        let distance = 300.0;
+        assert!(!bot.should_fire(orientation, distance));
+
+        // Cas 3: Ennemi proche mais mal aligné
+        let orientation = 0.6;
+        assert!(!bot.should_fire(orientation, distance));
+
+        // Cas 4: Ennemi très loin et mal aligné
+        let distance = 600.0;
+        assert!(!bot.should_fire(orientation, distance));
+    }
+
+    // Teste la vérification si un joueur est un ennemi
+    #[test]
+    fn test_is_enemy() {
+        let connection = TcpStream::connect("172.17.0.1:6969").unwrap();
+        let mut bot = Bot::new(connection, "test_bot".to_string());
+
+        // Cas 1: Joueur de la même équipe
+        let team_member = "TeamAlpha-1";
+        assert!(!bot.is_enemy(team_member));
+
+        // Cas 2: Joueur ennemi
+        let enemy = "EnemyBot";
+        assert!(bot.is_enemy(enemy));
+    }
+
+    // Teste la logique de poursuite d'un ennemi
+    #[test]
+    fn test_hunt_enemy() {
+        let connection = TcpStream::connect("172.17.0.1:6969").unwrap();
+        let mut bot = Bot::new(connection, "test_bot".to_string());
+
+        // Cas 1: Ennemi directement devant
+        let orientation = 0.5;
+        let distance = 100.0;
+        bot.hunt_enemy(orientation, distance);
+        // Vérifie que les moteurs sont à pleine puissance
+        // (Note: Ce test est limité car il ne peut pas vérifier les commandes envoyées au serveur)
+
+        // Cas 2: Ennemi à gauche
+        let orientation = 0.25;
+        bot.hunt_enemy(orientation, distance);
+        // Vérifie que le moteur gauche est réduit
+
+        // Cas 3: Ennemi à droite
+        let orientation = 0.75;
+        bot.hunt_enemy(orientation, distance);
+        // Vérifie que le moteur droit est réduit
+    }
+
+    // Teste la logique de recherche d'un ennemi
+    #[test]
+    fn test_search_ennemy() {
+        let connection = TcpStream::connect("172.17.0.1:6969").unwrap();
+        let mut bot = Bot::new(connection, "test_bot".to_string());
+
+        // Simule une recherche d'ennemi
+        bot.search_ennemy();
+        // Vérifie que les moteurs sont activés pour la recherche
+        // (Note: Ce test est limité car il ne peut pas vérifier les commandes envoyées au serveur)
     }
 }
