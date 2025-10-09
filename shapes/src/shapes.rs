@@ -1,12 +1,18 @@
 use std::fmt;
 
+#[derive(Debug)]
+#[derive(PartialEq)]
 pub struct Circle {
     pub radius: f64,
 }
+#[derive(Debug)]
+#[derive(PartialEq)]
 pub struct Square {
     pub side_length: i32,
 }
 
+#[derive(Debug)]
+#[derive(PartialEq)]
 pub struct Rectangle {
     pub length: i32,
     pub width: i32,
