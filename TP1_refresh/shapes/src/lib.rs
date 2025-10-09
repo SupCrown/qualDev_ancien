@@ -24,6 +24,14 @@ impl Circle {
     }
 }
 
+use std::fmt;
+
+impl fmt::Display for Circle {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "A Circle with radius {}", self.radius)
+    }
+}
+
 impl Square {
     fn square_area(&self) -> f64 {
         self.side_lentgh * self.side_lentgh
@@ -34,12 +42,43 @@ impl Square {
     }
 }
 
+impl fmt::Display for Square {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "A Square with side_lenght {}", self.side_lentgh)
+    }
+}
+
 impl Rectangle {
     fn rectangle_area(&self) -> f64 {
         self.width * self.height
     }
     fn rectangle_perimeter(&self) -> f64 {
         self.width * self.height * 2.0
+    }
+}
+
+impl fmt::Display for Rectangle {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "A Rectangle with width {}", self.width);
+        write!(f, "A Rectangle with height {}", self.height)
+    }
+}
+
+impl Circle {
+    fn scalecircle(&self, facteur: f64 ) -> f64 {
+        facteur*self.radius
+    }
+}
+
+impl Square {
+    fn scalesquare(&self, facteur: f64 ) -> f64 {
+        facteur*self.side_lentgh
+    }
+}
+
+impl Rectangle {
+    fn scalerectangle(&self, facteur: f64 ) -> f64 {
+        facteur*self.width*self.height
     }
 }
 
@@ -76,5 +115,54 @@ mod tests {
     fn can_calculate_area_and_perimeter_square(){
         let square = Square {side_lentgh: 3.14};
         assert_eq!(square.square_area(), square.side_lentgh * square.side_lentgh);
+    }
+
+    #[test]
+    fn can_calculate_area_and_perimeter_rectangle(){
+        let rectangle = Rectangle {width: 3.14, height: 3.14};
+        assert_eq!(rectangle.rectangle_area(), rectangle.width * rectangle.height);
+        assert_eq!(rectangle.rectangle_perimeter(), rectangle.width * rectangle.height * 2.0);
+    }
+
+    #[test]
+    fn can_use_circle_display(){
+        let circle = Circle {radius: 3.14};
+        let s = format!("{}", circle);
+        assert_eq!(s, "A Circle with radius 3.14");
+    }
+
+    #[test]
+    fn can_use_square_display(){
+        let square = Square {side_lentgh: 3.14};
+        let s = format!("{}", square);
+        assert_eq!(s, "A Square with side_lenght 3.14");
+    }
+
+    #[test]
+    fn can_use_rectangle_display(){
+        let rectangle = Rectangle {width: 3.14, height: 3.14};
+        let s = format!("{}", rectangle);
+        assert_eq!(s, "A Rectangle with width 3.14A Rectangle with height 3.14");
+    }
+
+    #[test]
+    fn can_use_circle_scale(){
+        let circle = Circle {radius: 3.14};
+        let facteur = 4.0;
+        assert_eq!(circle.scalecircle(facteur), circle.radius * facteur);
+    }
+
+    #[test]
+    fn can_use_square_scale(){
+        let square = Square {side_lentgh: 3.14};
+        let facteur = 4.0;
+        assert_eq!(square.scalesquare(facteur), square.side_lentgh * facteur)
+    }
+
+    #[test]
+    fn can_use_rectangle_scale(){
+        let rectangle = Rectangle {width: 3.14, height: 3.14};
+        let facteur = 4.0;
+        assert_eq!(rectangle.scalerectangle(facteur), rectangle.width * rectangle.height * facteur);
     }
 }
