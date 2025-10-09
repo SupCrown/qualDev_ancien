@@ -25,7 +25,7 @@ mod tests {
     fn can_calculate_circle_area() {
         let c = Circle { radius: 3.14 };
         let area = c.area();
-        assert_eq!(area, std::f64::consts::PI * 3.14 * 3.14);
+        assert_eq!(area, 30.974846927333925);
     }
     #[test]
     fn can_calculate_square_area() {
