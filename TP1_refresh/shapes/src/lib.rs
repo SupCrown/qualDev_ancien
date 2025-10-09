@@ -2,17 +2,17 @@ pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
 
-struct Circle {
-    radius : f64,
+pub struct Circle {
+    pub radius : f64,
 }
 
-struct Square {
-    side_lentgh : f64,
+pub struct Square {
+    pub side_lentgh : f64,
 }
 
-struct Rectangle {
-    width : f64,
-    height: f64,
+pub struct Rectangle {
+    pub width : f64,
+    pub height: f64,
 }
 
 impl Circle {
