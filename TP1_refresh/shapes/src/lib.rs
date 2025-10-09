@@ -16,7 +16,17 @@ pub struct Rectangle {
 }
 
 impl Circle {
-    fn circle_area(&self) -> f64 {
+
+
+    /// Returns circle's area
+    /// ```
+    /// # use shapes::Circle;
+    /// let c = Circle {radius: 1.0};
+    /// assert_eq!(c.circle_area(), std::f64::consts::PI);
+    /// ```
+
+
+    pub fn circle_area(&self) -> f64 {
         std::f64::consts::PI * self.radius.powi(2)
     }
     fn circle_perimeter(&self) -> f64 {
@@ -81,6 +91,8 @@ impl Rectangle {
         facteur*self.width*self.height
     }
 }
+
+
 
 #[cfg(test)]
 mod tests {
