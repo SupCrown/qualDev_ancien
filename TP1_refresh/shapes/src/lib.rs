@@ -83,6 +83,14 @@ impl Square {
 }
 
 impl fmt::Display for Square {
+
+    /// Returns a Square in the console
+    /// ```
+    /// let square = Square {side_lentgh: 3.14};
+    ///  let s = format!("{}", square);
+    ///  assert_eq!(s, "A Square with side_lenght 3.14");
+    /// ```
+
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "A Square with side_lenght {}", self.side_lentgh)
     }
@@ -113,8 +121,6 @@ impl Rectangle {
 }
 
 impl fmt::Display for Rectangle {
-
-
 
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "A Rectangle with width {}", self.width);
