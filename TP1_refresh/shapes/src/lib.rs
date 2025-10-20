@@ -22,21 +22,21 @@ impl Circle {
     /// ```
     /// # use shapes::Circle;
     /// let c = Circle {radius: 1.0};
-    /// assert_eq!(circle.circle_area(), std::f64::consts::PI * circle.radius.powi(2));
+    /// assert_eq!(c.circle_area(), std::f64::consts::PI * c.radius.powi(2));
     /// ```
-    /// 
+    ///
     /// Returns circle's perimeter
     /// ```
     /// # use shapes::Circle;
     /// let c = Circle {radius: 1.0};
-    /// assert_eq!(circle.circle_perimeter(), 2.0 * std::f64::consts::PI * circle.radius.powi(2));
+    /// assert_eq!(c.circle_perimeter(), 2.0 * std::f64::consts::PI * c.radius.powi(2));
     /// ```
 
 
     pub fn circle_area(&self) -> f64 {
         std::f64::consts::PI * self.radius.powi(2)
     }
-    fn circle_perimeter(&self) -> f64 {
+    pub fn circle_perimeter(&self) -> f64 {
         2.0 * std::f64::consts::PI * self.radius.powi(2)
     }
 }
@@ -50,11 +50,26 @@ impl fmt::Display for Circle {
 }
 
 impl Square {
-    fn square_area(&self) -> f64 {
+
+    /// Returns circle's area
+    /// ```
+    /// # use shapes::Square;
+    ///  let s = Square {side_lentgh: 3.14};
+    /// assert_eq!(s.square_area(), s.side_lentgh * s.side_lentgh);
+    /// ```
+    ///
+    /// Returns circle's perimeter
+    /// ```
+    /// # use shapes::Square;
+    ///  let s = Square {side_lentgh: 3.14};
+    /// assert_eq!(s.square_perimeter(), 4.0  * s.side_lentgh);
+    /// ```
+
+    pub fn square_area(&self) -> f64 {
         self.side_lentgh * self.side_lentgh
     }
 
-    fn square_perimeter(&self) -> f64 {
+    pub fn square_perimeter(&self) -> f64 {
         4.0 * self.side_lentgh
     }
 }
