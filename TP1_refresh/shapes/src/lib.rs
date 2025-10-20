@@ -182,6 +182,18 @@ impl Circle {
     }
 }
 
+impl Square {
+    pub fn new(side_lentgh: f64) -> Square {
+        Square { side_lentgh }
+    }
+}
+
+impl Rectangle {
+    pub fn new(width: f64, height: f64) -> Rectangle {
+        Rectangle { width, height }
+    }
+}
+
 
 #[cfg(test)]
 mod tests {
