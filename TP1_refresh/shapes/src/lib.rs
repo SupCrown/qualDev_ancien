@@ -130,24 +130,47 @@ impl fmt::Display for Rectangle {
     /// ```
 
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "A Rectangle with width {}", self.width);
-        write!(f, "A Rectangle with height {}", self.height)
+        write!(f, "A Rectangle with width {} and height {}", self.width, self.height)
     }
 }
 
 impl Circle {
+
+    /// Returns a new Circle scale
+    /// ```
+    ///  let circle = Circle {radius: 3.14};
+    ///  let facteur = 4.0;
+    ///  assert_eq!(circle.scalecircle(facteur), circle.radius * facteur);
+    /// ```
+
     pub fn scalecircle(&self, facteur: f64 ) -> f64 {
         facteur*self.radius
     }
 }
 
 impl Square {
+
+    /// Returns a new Square scale
+    /// ```
+    /// let square = Square {side_lentgh: 3.14};
+    ///  let facteur = 4.0;
+    ///  assert_eq!(square.scalesquare(facteur), square.side_lentgh * facteur)
+    /// ```
+
     pub fn scalesquare(&self, facteur: f64 ) -> f64 {
         facteur*self.side_lentgh
     }
 }
 
 impl Rectangle {
+
+    /// Returns a new Rectangle scale
+    /// ```
+    ///  let rectangle = Rectangle {width: 3.14, height: 3.14};
+    ///   let facteur = 4.0;
+    ///  assert_eq!(rectangle.scalerectangle(facteur), rectangle.width * rectangle.height * facteur);
+    /// ```
+
     pub fn scalerectangle(&self, facteur: f64 ) -> f64 {
         facteur*self.width*self.height
     }
