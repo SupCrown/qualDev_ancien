@@ -85,13 +85,13 @@ impl Rectangle {
     /// Returns circle's area
     /// ```
     /// # use shapes::Rectangle;
-    ///  let s = Square {side_lentgh: 3.14};
-    /// assert_eq!(s.square_area(), s.side_lentgh * s.side_lentgh);
+    ///  let r = Rectangle {side_lentgh: 3.14};
+    /// assert_eq!(s.square_area(), r.side_lentgh * s.side_lentgh);
     /// ```
     ///
     /// Returns circle's perimeter
     /// ```
-    /// # use shapes::Square;
+    /// # use shapes::Rectangle;
     ///  let s = Square {side_lentgh: 3.14};
     /// assert_eq!(s.square_perimeter(), 4.0  * s.side_lentgh);
     /// ```
