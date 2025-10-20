@@ -122,6 +122,13 @@ impl Rectangle {
 
 impl fmt::Display for Rectangle {
 
+    /// Returns a Rectangle in the console
+    /// ```
+    ///  let rectangle = Rectangle {width: 3.14, height: 3.14};
+    ///  let s = format!("{}", rectangle);
+    ///  assert_eq!(s, "A Rectangle with width 3.14A Rectangle with height 3.14");
+    /// ```
+
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "A Rectangle with width {}", self.width);
         write!(f, "A Rectangle with height {}", self.height)
