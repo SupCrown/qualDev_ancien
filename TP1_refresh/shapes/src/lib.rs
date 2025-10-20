@@ -22,7 +22,14 @@ impl Circle {
     /// ```
     /// # use shapes::Circle;
     /// let c = Circle {radius: 1.0};
-    /// assert_eq!(c.circle_area(), std::f64::consts::PI);
+    /// assert_eq!(circle.circle_area(), std::f64::consts::PI * circle.radius.powi(2));
+    /// ```
+    /// 
+    /// Returns circle's perimeter
+    /// ```
+    /// # use shapes::Circle;
+    /// let c = Circle {radius: 1.0};
+    /// assert_eq!(circle.circle_perimeter(), 2.0 * std::f64::consts::PI * circle.radius.powi(2));
     /// ```
 
 
@@ -92,6 +99,12 @@ impl Rectangle {
     }
 }
 
+///impl Circle {
+    ///fn newcircle(&self) -> Circle  {
+        ///self.circle_area(self)
+    ///}
+///}
+
 
 
 #[cfg(test)]
@@ -127,6 +140,7 @@ mod tests {
     fn can_calculate_area_and_perimeter_square(){
         let square = Square {side_lentgh: 3.14};
         assert_eq!(square.square_area(), square.side_lentgh * square.side_lentgh);
+        assert_eq!(square.square_perimeter(), 4.0  * square.side_lentgh);
     }
 
     #[test]
