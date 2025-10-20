@@ -19,12 +19,35 @@ pub struct Rectangle {
 }
 
 impl Circle {
+
+
+    /// Returns circle's area
+    /// ```
+    /// # use shapes::Circle;
+    /// let ca = Circle {radius: 1.0};
+    /// assert_eq!(ca.area(), std::f64::consts::PI);
+    /// ```
     pub fn area(&self) -> f64 {
         std::f64::consts::PI * self.radius.powi(2)
     }
+    /// Returns circle's perimeter
+    /// ```
+    /// # use shapes::Circle;
+    ///  let cp = Circle { radius: 3.14 };
+    ///  let perimeter = cp.perimeter();
+    ///  assert_eq!(perimeter, std::f64::consts::PI * 3.14 * 2.0);
+    /// ```
     pub fn perimeter(&self) -> f64 {
         std::f64::consts::PI * self.radius * 2.0
     }
+    /// Returns a rescaled circle
+    /// ```
+    /// # use shapes::Circle;
+    ///   let mut cs = Circle { radius: 3.14};
+    ///   let cs2 = Circle { radius: 3.14*0.0};
+    ///   cs.scale(0.0) ;
+    ///   assert_eq!(cs, cs2);
+    /// ```
     pub fn scale(&mut self, factor: f64) {
         self.radius *= factor;
     }
