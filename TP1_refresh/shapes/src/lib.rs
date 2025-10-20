@@ -51,14 +51,14 @@ impl fmt::Display for Circle {
 
 impl Square {
 
-    /// Returns circle's area
+    /// Returns square's area
     /// ```
     /// # use shapes::Square;
     ///  let s = Square {side_lentgh: 3.14};
     /// assert_eq!(s.square_area(), s.side_lentgh * s.side_lentgh);
     /// ```
     ///
-    /// Returns circle's perimeter
+    /// Returns square's perimeter
     /// ```
     /// # use shapes::Square;
     ///  let s = Square {side_lentgh: 3.14};
@@ -82,18 +82,18 @@ impl fmt::Display for Square {
 
 impl Rectangle {
 
-    /// Returns circle's area
+    /// Returns rectangle's area
     /// ```
     /// # use shapes::Rectangle;
-    ///  let r = Rectangle {side_lentgh: 3.14};
-    /// assert_eq!(s.square_area(), r.side_lentgh * s.side_lentgh);
+    ///  let r = Rectangle {width: 3.14, height: 3.14};
+    /// assert_eq!(r.rectangle_area(), r.width * r.height);
     /// ```
     ///
-    /// Returns circle's perimeter
+    /// Returns rectangle's perimeter
     /// ```
     /// # use shapes::Rectangle;
-    ///  let s = Square {side_lentgh: 3.14};
-    /// assert_eq!(s.square_perimeter(), 4.0  * s.side_lentgh);
+    ///  let r = Rectangle {width: 3.14, height: 3.14};
+    /// assert_eq!(r.rectangle_perimeter(), r.width * r.height * 2.0);
     /// ```
 
     pub fn rectangle_area(&self) -> f64 {
