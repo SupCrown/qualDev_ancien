@@ -81,10 +81,25 @@ impl fmt::Display for Square {
 }
 
 impl Rectangle {
-    fn rectangle_area(&self) -> f64 {
+
+    /// Returns circle's area
+    /// ```
+    /// # use shapes::Rectangle;
+    ///  let s = Square {side_lentgh: 3.14};
+    /// assert_eq!(s.square_area(), s.side_lentgh * s.side_lentgh);
+    /// ```
+    ///
+    /// Returns circle's perimeter
+    /// ```
+    /// # use shapes::Square;
+    ///  let s = Square {side_lentgh: 3.14};
+    /// assert_eq!(s.square_perimeter(), 4.0  * s.side_lentgh);
+    /// ```
+
+    pub fn rectangle_area(&self) -> f64 {
         self.width * self.height
     }
-    fn rectangle_perimeter(&self) -> f64 {
+    pub fn rectangle_perimeter(&self) -> f64 {
         self.width * self.height * 2.0
     }
 }
