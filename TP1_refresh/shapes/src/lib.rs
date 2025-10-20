@@ -44,6 +44,14 @@ impl Circle {
 use std::fmt;
 
 impl fmt::Display for Circle {
+
+    /// Returns a Circle in the console
+    /// ```
+    /// let circle = Circle {radius: 3.14};
+    ///let s = format!("{}", circle);
+    ///assert_eq!(s, "A Circle with radius 3.14");
+    /// ```
+
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "A Circle with radius {}", self.radius)
     }
@@ -105,6 +113,9 @@ impl Rectangle {
 }
 
 impl fmt::Display for Rectangle {
+
+
+
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "A Rectangle with width {}", self.width);
         write!(f, "A Rectangle with height {}", self.height)
@@ -112,29 +123,28 @@ impl fmt::Display for Rectangle {
 }
 
 impl Circle {
-    fn scalecircle(&self, facteur: f64 ) -> f64 {
+    pub fn scalecircle(&self, facteur: f64 ) -> f64 {
         facteur*self.radius
     }
 }
 
 impl Square {
-    fn scalesquare(&self, facteur: f64 ) -> f64 {
+    pub fn scalesquare(&self, facteur: f64 ) -> f64 {
         facteur*self.side_lentgh
     }
 }
 
 impl Rectangle {
-    fn scalerectangle(&self, facteur: f64 ) -> f64 {
+    pub fn scalerectangle(&self, facteur: f64 ) -> f64 {
         facteur*self.width*self.height
     }
 }
 
-///impl Circle {
-    ///fn newcircle(&self) -> Circle  {
-        ///self.circle_area(self)
-    ///}
-///}
-
+impl Circle {
+    pub fn new(radius: f64) -> Circle {
+        Circle { radius }
+    }
+}
 
 
 #[cfg(test)]
