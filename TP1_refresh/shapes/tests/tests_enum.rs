@@ -65,5 +65,11 @@ fn can_use_function_shape_rectangle(){
     }
 }
 
+#[test]
+fn can_use_trait(){
 
+    let mut v: Vec<Box<dyn Shape>> = Vec::new();
+    v.push(Box::new(Circle::new(1.0)));
+    v.push(Box::new(Square::new(2.0)));
+}
 
