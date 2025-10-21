@@ -1,6 +1,6 @@
 
 
-use shapes::Circle;
+use shapes::{Circle};
 
 fn main() {
     let c = Circle::new(3.14);

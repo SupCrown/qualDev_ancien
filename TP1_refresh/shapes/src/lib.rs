@@ -2,6 +2,8 @@ pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
 
+pub mod shapes_enum;
+
 pub struct Circle {
     pub radius : f64,
 }
