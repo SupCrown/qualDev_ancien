@@ -47,6 +47,7 @@ impl fmt::Display for Circle {
 
     /// Returns a Circle in the console
     /// ```
+    /// use shapes::Circle;
     /// let circle = Circle {radius: 3.14};
     ///let s = format!("{}", circle);
     ///assert_eq!(s, "A Circle with radius 3.14");
@@ -86,6 +87,7 @@ impl fmt::Display for Square {
 
     /// Returns a Square in the console
     /// ```
+    /// use shapes::Square;
     /// let square = Square {side_lentgh: 3.14};
     ///  let s = format!("{}", square);
     ///  assert_eq!(s, "A Square with side_lenght 3.14");
@@ -124,9 +126,10 @@ impl fmt::Display for Rectangle {
 
     /// Returns a Rectangle in the console
     /// ```
-    ///  let rectangle = Rectangle {width: 3.14, height: 3.14};
+    ///  use shapes::Rectangle;
+    /// let rectangle = Rectangle {width: 3.14, height: 3.14};
     ///  let s = format!("{}", rectangle);
-    ///  assert_eq!(s, "A Rectangle with width 3.14A Rectangle with height 3.14");
+    ///  assert_eq!(s, "A Rectangle with width 3.14 and height 3.14");
     /// ```
 
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -138,7 +141,8 @@ impl Circle {
 
     /// Returns a new Circle scale
     /// ```
-    ///  let circle = Circle {radius: 3.14};
+    ///  use shapes::Circle;
+    /// let circle = Circle{radius: 3.14};
     ///  let facteur = 4.0;
     ///  assert_eq!(circle.scalecircle(facteur), circle.radius * facteur);
     /// ```
@@ -152,6 +156,7 @@ impl Square {
 
     /// Returns a new Square scale
     /// ```
+    /// use shapes::Square;
     /// let square = Square {side_lentgh: 3.14};
     ///  let facteur = 4.0;
     ///  assert_eq!(square.scalesquare(facteur), square.side_lentgh * facteur)
@@ -166,7 +171,8 @@ impl Rectangle {
 
     /// Returns a new Rectangle scale
     /// ```
-    ///  let rectangle = Rectangle {width: 3.14, height: 3.14};
+    ///  use shapes::Rectangle;
+    /// let rectangle = Rectangle {width: 3.14, height: 3.14};
     ///   let facteur = 4.0;
     ///  assert_eq!(rectangle.scalerectangle(facteur), rectangle.width * rectangle.height * facteur);
     /// ```
@@ -193,6 +199,36 @@ impl Rectangle {
         Rectangle { width, height }
     }
 }
+
+pub enum Shape  {
+    Circle(Circle),
+    Square(Square),
+    Rectangle(Rectangle),
+}
+
+
+
+impl Shape {
+    pub fn area(&self) -> f64 {
+        match self {
+            Shape::Circle(c) => c.circle_area(),
+            Shape::Square(s) => s.square_area(),
+            Shape::Rectangle(r) => r.rectangle_area(),
+        }
+    }
+    pub fn perimeter(&self) -> f64 {
+        match self {
+            Shape::Circle(c) => c.circle_perimeter(),
+            Shape::Square(s) => s.square_perimeter(),
+            Shape::Rectangle(r) => r.rectangle_perimeter(),
+        }
+    }
+}
+
+
+
+
+
 
 
 #[cfg(test)]
@@ -256,7 +292,7 @@ mod tests {
     fn can_use_rectangle_display(){
         let rectangle = Rectangle {width: 3.14, height: 3.14};
         let s = format!("{}", rectangle);
-        assert_eq!(s, "A Rectangle with width 3.14A Rectangle with height 3.14");
+        assert_eq!(s, "A Rectangle with width 3.14 and height 3.14");
     }
 
     #[test]
