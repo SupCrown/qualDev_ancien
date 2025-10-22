@@ -46,4 +46,26 @@ impl Shapetrait for Rectangle {
     }
 }
 
+pub fn total_area(shapes: &[&dyn Shapetrait]) -> f64 {
+    shapes.iter().map(|s| s.area()).sum()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn total_area_mixed_from_lib() {
+        let c = Circle { radius: 1.0 };
+        let s = Square { side_lentgh: 2.0 };
+        let r = Rectangle { width: 3.0, height: 4.0 };
+
+        let shapes: Vec<&dyn Shapetrait> = vec![&c, &s, &r];
+        let expected = c.area() + s.area() + r.area();
+        assert!((total_area(&shapes) - expected).abs() < 1e-12);
+    }
+}
+
+
+
 
