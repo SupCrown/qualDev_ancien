@@ -21,14 +21,14 @@ impl Circle {
 
     /// Returns circle's area
     /// ```
-    /// # use shapes::Circle;
+    /// use shapes::shapes_enum::Circle;
     /// let c = Circle {radius: 1.0};
     /// assert_eq!(c.circle_area(), std::f64::consts::PI * c.radius.powi(2));
     /// ```
     ///
     /// Returns circle's perimeter
     /// ```
-    /// # use shapes::Circle;
+    /// use shapes::shapes_enum::Circle;
     /// let c = Circle {radius: 1.0};
     /// assert_eq!(c.circle_perimeter(), 2.0 * std::f64::consts::PI * c.radius.powi(2));
     /// ```
@@ -48,7 +48,7 @@ impl fmt::Display for Circle {
 
     /// Returns a Circle in the console
     /// ```
-    /// use shapes::Circle;
+    /// use shapes::shapes_enum::Circle;
     /// let circle = Circle {radius: 3.14};
     ///let s = format!("{}", circle);
     ///assert_eq!(s, "A Circle with radius 3.14");
@@ -63,14 +63,14 @@ impl Square {
 
     /// Returns square's area
     /// ```
-    /// # use shapes::Square;
+    /// # use shapes::shapes_enum::Square;
     ///  let s = Square {side_lentgh: 3.14};
     /// assert_eq!(s.square_area(), s.side_lentgh * s.side_lentgh);
     /// ```
     ///
     /// Returns square's perimeter
     /// ```
-    /// # use shapes::Square;
+    /// # use shapes::shapes_enum::Square;
     ///  let s = Square {side_lentgh: 3.14};
     /// assert_eq!(s.square_perimeter(), 4.0  * s.side_lentgh);
     /// ```
@@ -88,7 +88,7 @@ impl fmt::Display for Square {
 
     /// Returns a Square in the console
     /// ```
-    /// use shapes::Square;
+    /// use shapes::shapes_enum::Square;
     /// let square = Square {side_lentgh: 3.14};
     ///  let s = format!("{}", square);
     ///  assert_eq!(s, "A Square with side_lenght 3.14");
@@ -103,14 +103,14 @@ impl Rectangle {
 
     /// Returns rectangle's area
     /// ```
-    /// # use shapes::Rectangle;
+    /// # use shapes::shapes_enum::Rectangle;
     ///  let r = Rectangle {width: 3.14, height: 3.14};
     /// assert_eq!(r.rectangle_area(), r.width * r.height);
     /// ```
     ///
     /// Returns rectangle's perimeter
     /// ```
-    /// # use shapes::Rectangle;
+    /// # use shapes::shapes_enum::Rectangle;
     ///  let r = Rectangle {width: 3.14, height: 3.14};
     /// assert_eq!(r.rectangle_perimeter(), r.width * r.height * 2.0);
     /// ```
@@ -127,7 +127,7 @@ impl fmt::Display for Rectangle {
 
     /// Returns a Rectangle in the console
     /// ```
-    ///  use shapes::Rectangle;
+    ///  use shapes::shapes_enum::Rectangle;
     /// let rectangle = Rectangle {width: 3.14, height: 3.14};
     ///  let s = format!("{}", rectangle);
     ///  assert_eq!(s, "A Rectangle with width 3.14 and height 3.14");
@@ -142,7 +142,7 @@ impl Circle {
 
     /// Returns a new Circle scale
     /// ```
-    ///  use shapes::Circle;
+    ///  use shapes::shapes_enum::Circle;
     /// let circle = Circle{radius: 3.14};
     ///  let facteur = 4.0;
     ///  assert_eq!(circle.scalecircle(facteur), circle.radius * facteur);
@@ -157,7 +157,7 @@ impl Square {
 
     /// Returns a new Square scale
     /// ```
-    /// use shapes::Square;
+    /// use shapes::shapes_enum::Square;
     /// let square = Square {side_lentgh: 3.14};
     ///  let facteur = 4.0;
     ///  assert_eq!(square.scalesquare(facteur), square.side_lentgh * facteur)
@@ -172,7 +172,7 @@ impl Rectangle {
 
     /// Returns a new Rectangle scale
     /// ```
-    ///  use shapes::Rectangle;
+    ///  use shapes::shapes_enum::Rectangle;
     /// let rectangle = Rectangle {width: 3.14, height: 3.14};
     ///   let facteur = 4.0;
     ///  assert_eq!(rectangle.scalerectangle(facteur), rectangle.width * rectangle.height * facteur);
