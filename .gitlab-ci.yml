@@ -1,0 +1,14 @@
+image: rust:latest
+
+stages:
+  - test
+
+test_shopping_cart:
+  stage: test
+  script:
+    - cd shopping_cart
+    - cargo test --verbose
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+      #glrt-jiQ3dIo_5fC1YXPfzezK2W86MQpwOjYyOAp0OjMKdTpnOBI.01.1b07vmvxs

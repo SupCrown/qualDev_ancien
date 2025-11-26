@@ -1,1 +1,0 @@
-pub mod bot; // Rendre le module `bot` public pour l'import
